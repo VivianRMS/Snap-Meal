@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import AiwithImage from "./upload";
 
 const genAI = new GoogleGenerativeAI("AIzaSyAqmfslqSGlrqWbSllhR5ce0NPD2hxMuGs");
 const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
@@ -9,40 +10,43 @@ const now_date = new Date();
 const exp_date = new Date(now_date);
 exp_date.setDate(exp_date.getDate() + 3);
 
-
 const result_schedule = [
   { recipeName: "", recipeDescription: "", numberIn14Days: 0 },
 ];
 
+const CATEGORIES = [
+  { name: "food", color: "#3b82f6" },
+  { name: "receipe", color: "#16a34a" },
+];
 
 const testfoods = [
   {
     id: 1,
     name: "apple",
     count: 3,
-    purchaseDate: now_date,
-    expirationDate: exp_date,
+    purchaseDate: "2023",
+    expirationDate: "2023",
   },
   {
     id: 2,
     name: "pork belly",
     count: 2,
-    purchaseDate: now_date,
-    expirationDate: exp_date,
+    purchaseDate: "2023",
+    expirationDate: "2023",
   },
   {
     id: 3,
     name: "spinach",
     count: 1,
-    purchaseDate: now_date,
-    expirationDate: exp_date,
+    purchaseDate: "2023",
+    expirationDate: "2023",
   },
 ];
 
 const Home = () => {
   const [search, setSearch] = useState("");
   const [aiResponse, setResponse] = useState("");
-  const [foods, setfoods] = useState(testfoods);
+  const [foods, setfoods] = useState([]);
   const [recipes, setRecipe] = useState(result_schedule);
   const [loading, setLoading] = useState(false);
 
@@ -91,30 +95,37 @@ const Home = () => {
       console.error("Failed to generate schedule", error);
       setRecipe("Error generating schedule: " + error.message);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   }
   const handleClick2 = () => {
     generateRecipe();
   };
 
+  const appTitle = "Food Planner";
+
   return (
     <div>
-      <h1>Generative AI Restaurant App!</h1>
-      <p>Built with ❤️ using ReactJS + Redux + Google Gemini</p>
+      <header className="header">
+        <div className="logo">
+          {/* <img src="logo.png" height="68" width="68" alt="Today I Learned Logo" /> */}
+          <h1>{appTitle}</h1>
+        </div>
+      </header>
+      <AiwithImage start_id={foods.length} setfoods={setfoods} />
 
-      <div style={{ display: "flex" }}>
+      {/* <div style={{ display: "flex" }}>
         <input
           placeholder="Search Food with Category using Generative AI"
           onChange={(e) => handleChangeSearch(e)}
         />
         <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
           Search
-        </button>
-        <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
-          generate
-        </button>
-      </div>
+        </button> */}
+      <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
+        generate
+      </button>
+      {/* </div> */}
 
       {loading === true && search !== "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
@@ -140,6 +151,10 @@ const Home = () => {
     </div>
   );
 };
+
+function Loader() {
+  return <p className="message">Loading ...</p>;
+}
 
 function NewFoodForm({ foods, setfoods, setShowAddFood }) {
   const [name, setName] = useState("");
@@ -223,7 +238,6 @@ function FoodList({ foods, setfoods }) {
   );
 }
 
-
 function Food({ food, setfoods }) {
   const [isUpdating, setIsUpdating] = useState(false);
   async function handleChange(columnName) {
@@ -254,8 +268,8 @@ function Food({ food, setfoods }) {
       <p>{food.name}</p>
       <div className="food-description">
         <span className="tag">{food.count}</span>
-        <span className="tag">{food.purchaseDate.toLocaleString()}</span>
-        <span className="tag">{food.expirationDate.toLocaleString()}</span>
+        <span className="tag">{food.purchaseDate}</span>
+        <span className="tag">{food.expirationDate}</span>
       </div>
 
       <div className="change-buttons">
