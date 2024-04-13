@@ -78,7 +78,7 @@ const Home = () => {
     setLoading(true);
     try {
       // Format the expiration dates as strings for the prompt
-      const prompt = `Generate a evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
+      const prompt = `Generate a evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${foods
         .map((food) => `${food.name} (expires on ${food.expirationDate})`)
         .join(", ")}, and restricted to the diet type${
         selectedDiets.length > 1 ? "s" : ""
@@ -87,7 +87,7 @@ const Home = () => {
         .replace(
           /, ([^,]*)$/,
           " and $1"
-        )}. Please provide the answer in the form of strictly JSON array, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
+        )}. Also strictly avoid foods in ${allergies}. Please provide the answer in the form of strictly JSON array, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
 
       const result = await model_text.generateContent([prompt]);
       const response = await result.response.candidates[0].content.parts[0]
