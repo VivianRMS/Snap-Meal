@@ -145,7 +145,6 @@ const Home = () => {
         </div>
       </header>
       <AiwithImage start_id={foods.length} setfoods={setfoods} />
-
       {loading === true && search !== "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
       ) : (
@@ -163,7 +162,7 @@ const Home = () => {
           setfoods={setfoods}
           setShowAddFood={setShowAddFood}
         />
-      ) : null}{" "}
+      ) : null}
       <div style={{ display: "flex" }}>
         <DietFilters diets={diets} onDietChange={handleDietChange} />
         <div>
@@ -184,7 +183,6 @@ const Home = () => {
           <p>{allergies}</p>
         </div>
       </div>
-
       <FoodList foods={foods} setfoods={setfoods} />
       <Planner recipeArrayProp={recipes} />
     </div>
@@ -284,7 +282,9 @@ function Food({ food, setfoods }) {
     if (columnName === "add") {
       setfoods((foods) =>
         foods.map((f) =>
-          f.id === food.id ? { ...food, count: food.count + 1 } : f
+          f.id === food.id
+            ? { ...food, count: parseInt(food.count, 10) + 1 }
+            : f
         )
       );
     } else if (columnName === "minus") {
@@ -293,7 +293,9 @@ function Food({ food, setfoods }) {
       }
       setfoods((foods) =>
         foods.map((f) =>
-          f.id === food.id ? { ...food, count: food.count - 1 } : f
+          f.id === food.id
+            ? { ...food, count: parseInt(food.count, 10) - 1 }
+            : f
         )
       );
     } else {
