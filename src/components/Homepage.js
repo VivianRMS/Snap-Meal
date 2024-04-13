@@ -94,7 +94,6 @@ const Home = () => {
           " and $1"
         )}. Please provide the answer in the form of strictly JSON array, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
 
-      setRecipe(result);
       const result = await model_text.generateContent([prompt]);
       const response = await result.response.candidates[0].content.parts[0].text;
       console.log(response);
