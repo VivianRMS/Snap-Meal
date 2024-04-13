@@ -14,7 +14,6 @@ const result_schedule = [
   { recipeName: "", recipeDescription: "", numberIn14Days: 0 },
 ];
 
-
 const testfoods = [
   {
     id: 1,
@@ -41,7 +40,7 @@ const testfoods = [
 
 const Home = () => {
   const [search, setSearch] = useState("");
-  const [aiResponse, setResponse] = useState("");
+  const [allergies, setAllergies] = useState("");
   const [foods, setfoods] = useState(testfoods);
   const [recipes, setRecipe] = useState(result_schedule);
   const [loading, setLoading] = useState(false);
@@ -54,18 +53,14 @@ const Home = () => {
 
   // Generative AI Call to fetch dishes
 
-  async function aiRun() {
+  async function changeAllergies() {
     setLoading(true);
-    const prompt = `random meals related to ${search} category with images and prices`;
-    const result = await model_text.generateContent([prompt]);
-    const response = await result.response;
-    const text = response.text();
-    setResponse(text);
+    setAllergies("${search}");
     setLoading(false);
   }
 
   const handleClick = () => {
-    aiRun();
+    changeAllergies();
   };
 
   async function generateRecipe() {
@@ -86,7 +81,7 @@ const Home = () => {
         .replace(
           /, ([^,]*)$/,
           " and $1"
-        )}. Please provide the answer in the form of an array [{recipeName, recipeDescription, numberIn14Days}].`;
+        )}. Please avoid foods in ${allergies} Please provide the answer in the form of an array [{recipeName, recipeDescription, numberIn14Days}].`;
 
       const result = await model_text.generateContent(prompt);
       setRecipe(result);
@@ -136,7 +131,6 @@ const Home = () => {
     <div>
       <h1>Generative AI Restaurant App!</h1>
       <p>Built with ❤️ using ReactJS + Redux + Google Gemini</p>
-
       <div style={{ display: "flex" }}>
         <input
           placeholder="Search Food with Category using Generative AI"
@@ -149,12 +143,10 @@ const Home = () => {
           Regenerate
         </button>
       </div>
-
       {loading === true && search !== "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
       ) : (
         <div style={{ margin: "30px 0" }}>
-          <p>{aiResponse}</p>
         </div>
       )}
       <button
@@ -169,10 +161,25 @@ const Home = () => {
           setfoods={setfoods}
           setShowAddFood={setShowAddFood}
         />
-      ) : null}      <div>
+      ) : null}{" "}
+      <div style={{ display: "flex" }}>
         <DietFilters diets={diets} onDietChange={handleDietChange} />
+        <div>
+          <p>
+            Have other allergies? No worries! Tell us you want to avoid these food:
+          </p>
+          <input
+            placeholder="Last time record"
+            onChange={(e) => handleChangeSearch(e)}
+          />
+          <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
+            Confirm
+          </button>
+          <button style={{ marginLeft: "20px" }} onClick={() => handleClick2()}>
+            Regenerate
+          </button>
+        </div>
       </div>
-
       <FoodList foods={foods} setfoods={setfoods} />
     </div>
   );
@@ -334,6 +341,5 @@ const DietFilters = ({ diets, onDietChange }) => {
     </div>
   );
 };
-
 
 export default Home;
