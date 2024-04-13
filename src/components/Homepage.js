@@ -55,6 +55,8 @@ const Home = () => {
   const [foods, setfoods] = useState([]);
   const [recipes, setRecipe] = useState(result_schedule);
   const [loading, setLoading] = useState(false);
+  const [currentCatgory, setCurrentCategory] = useState("food");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showAddFood, setShowAddFood] = useState(false);
 
@@ -144,52 +146,89 @@ const Home = () => {
           <h1>{appTitle}</h1>
         </div>
       </header>
-      <AiwithImage start_id={foods.length} setfoods={setfoods} />
 
-      {loading === true && search !== "" ? (
+      {/* {loading === true && search !== "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
       ) : (
         <div style={{ margin: "30px 0" }}></div>
-      )}
-      <button
-        className="btn btn-large btn-open"
-        onClick={() => setShowAddFood((show) => !show)}
-      >
-        {showAddFood ? "Close" : "Add food!"}
-      </button>
-      {showAddFood ? (
-        <NewFoodForm
-          foods={foods}
-          setfoods={setfoods}
-          setShowAddFood={setShowAddFood}
-        />
-      ) : null}{" "}
-      <div style={{ display: "flex" }}>
-        <DietFilters diets={diets} onDietChange={handleDietChange} />
-        <div>
-          <p>
-            Have other allergies? No worries! Tell us you want to avoid these
-            food:
-          </p>
-          <input
-            placeholder="Last time record"
-            onChange={(e) => handleChangeSearch(e)}
-          />
-          <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
-            Confirm
-          </button>
-          <button style={{ marginLeft: "20px" }} onClick={() => handleClick2()}>
-            Regenerate
-          </button>
-          <p>{allergies}</p>
-        </div>
-      </div>
-
-      <FoodList foods={foods} setfoods={setfoods} />
-      <Planner recipeArrayProp={recipes} />
+      )} */}
+      <main className="main">
+        <CategoryFilter setCurrentCategory={setCurrentCategory} />
+        {isLoading ? (
+          <Loader />
+        ) : currentCatgory === "food" ? (
+          <div>
+            <AiwithImage start_id={foods.length} setfoods={setfoods} />
+            <button
+              className="btn btn-large btn-open"
+              onClick={() => setShowAddFood((show) => !show)}
+            >
+              {showAddFood ? "Close" : "Add food!"}
+            </button>
+            {showAddFood ? (
+              <NewFoodForm
+                foods={foods}
+                setfoods={setfoods}
+                setShowAddFood={setShowAddFood}
+              />
+            ) : null}
+            <FoodList foods={foods} setfoods={setfoods} />
+          </div>
+        ) : (
+          <div>
+            <div style={{ display: "flex" }}>
+              <DietFilters diets={diets} onDietChange={handleDietChange} />
+              <div>
+                <p>
+                  Have other allergies? No worries! Tell us you want to avoid
+                  these food:
+                </p>
+                <input
+                  placeholder="Last time record"
+                  onChange={(e) => handleChangeSearch(e)}
+                />
+                <button
+                  style={{ marginLeft: "20px" }}
+                  onClick={() => handleClick()}
+                >
+                  Confirm
+                </button>
+                <button
+                  style={{ marginLeft: "20px" }}
+                  onClick={() => handleClick2()}
+                >
+                  Regenerate
+                </button>
+                <p>{allergies}</p>
+              </div>
+            </div>
+            <Planner recipeArrayProp={recipes} />
+          </div>
+        )}
+      </main>
     </div>
   );
 };
+
+function CategoryFilter({ setCurrentCategory }) {
+  return (
+    <aside>
+      <ul>
+        {CATEGORIES.map((cat) => (
+          <li key={cat.name} className="category">
+            <button
+              className="btn btn-category"
+              style={{ backgroundColor: cat.color }}
+              onClick={() => setCurrentCategory(cat.name)}
+            >
+              {cat.name}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
+}
 
 function Loader() {
   return <p className="message">Loading ...</p>;
