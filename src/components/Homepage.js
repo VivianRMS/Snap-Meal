@@ -70,15 +70,20 @@ const Home = () => {
     setLoading(true);
     try {
       // Format the expiration dates as strings for the prompt
-      const prompt = `Generate a evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
+      const prompt = `Generate an evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
         .map(
           (food) =>
             `${food.name} (expires on ${food.expirationDate
               .toISOString()
               .substring(0, 10)})`
         )
-        .join(
-          ", "
+        .join(", ")}, and restricted to the diet type${
+        selectedDiets.length > 1 ? "s" : ""
+      } ${selectedDiets
+        .join(", ")
+        .replace(
+          /, ([^,]*)$/,
+          " and $1"
         )}. Please provide the answer in the form of an array [{recipeName, recipeDescription, numberIn14Days}].`;
 
       const result = await model_text.generateContent(prompt);
@@ -89,11 +94,40 @@ const Home = () => {
       console.error("Failed to generate schedule", error);
       setRecipe("Error generating schedule: " + error.message);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   }
   const handleClick2 = () => {
     generateRecipe();
+  };
+
+  const [diets, setDiets] = useState([
+    { type: "Vegan Diet", isSelected: false },
+    { type: "Ketogenic", isSelected: false },
+    { type: "Mediterranean Diet", isSelected: false },
+    { type: "Paleo Diet", isSelected: false },
+    { type: "Atkins", isSelected: false },
+    { type: "Carnivore Diet", isSelected: false },
+    { type: "Dubrow Diet", isSelected: false },
+    { type: "Intermittent Fasting", isSelected: false },
+  ]);
+
+  const [selectedDiets, setSelectedDiets] = useState([]);
+
+  const handleDietChange = (changedDiet) => {
+    const updatedDiets = diets.map((diet) => {
+      if (diet.type === changedDiet.type) {
+        return { ...diet, isSelected: !diet.isSelected };
+      }
+      return diet;
+    });
+    setDiets(updatedDiets);
+
+    // Update selected diets array
+    const updatedSelectedDiets = updatedDiets
+      .filter((diet) => diet.isSelected)
+      .map((diet) => diet.type);
+    setSelectedDiets(updatedSelectedDiets);
   };
 
   return (
@@ -109,8 +143,8 @@ const Home = () => {
         <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
           Search
         </button>
-        <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
-          generate
+        <button style={{ marginLeft: "20px" }} onClick={() => handleClick2()}>
+          Regenerate
         </button>
       </div>
 
@@ -121,6 +155,9 @@ const Home = () => {
           <p>{aiResponse}</p>
         </div>
       )}
+      <div>
+        <DietFilters diets={diets} onDietChange={handleDietChange} />
+      </div>
 
       <FoodList foods={foods} setfoods={setfoods} />
     </div>
@@ -143,7 +180,6 @@ function FoodList({ foods, setfoods }) {
     </section>
   );
 }
-
 
 function Food({ food, setfoods }) {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -186,5 +222,30 @@ function Food({ food, setfoods }) {
     </li>
   );
 }
+
+const DietFilters = ({ diets, onDietChange }) => {
+  const handleChange = (dietType) => {
+    onDietChange(dietType);
+  };
+
+  return (
+    <div>
+      <h3>Select Your Diet Type:</h3>
+      {diets.map((diet, index) => (
+        <div key={index}>
+          <input
+            type="checkbox"
+            id={diet.type}
+            name={diet.type}
+            checked={diet.isSelected}
+            onChange={() => handleChange(diet)}
+          />
+          <label htmlFor={diet.type}>{diet.type}</label>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 
 export default Home;
