@@ -87,7 +87,7 @@ const Home = () => {
         .replace(
           /, ([^,]*)$/,
           " and $1"
-        )}. Also strictly avoid foods in ${allergies}. Please provide the answer in the form of strictly JSON array, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
+        )}. Also strictly avoid foods in ${allergies}. Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe), 'day'(day of each recipe range from 1 to 14). Make Sure the JSON is valid,but do not write '''json before json array`;
 
       const result = await model_text.generateContent([prompt]);
       const response = await result.response.candidates[0].content.parts[0]
