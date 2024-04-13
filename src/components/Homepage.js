@@ -79,12 +79,7 @@ const Home = () => {
     try {
       // Format the expiration dates as strings for the prompt
       const prompt = `Generate a evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
-        .map(
-          (food) =>
-            `${food.name} (expires on ${food.expirationDate
-              .toISOString()
-              .substring(0, 10)})`
-        )
+        .map((food) => `${food.name} (expires on ${food.expirationDate})`)
         .join(", ")}, and restricted to the diet type${
         selectedDiets.length > 1 ? "s" : ""
       } ${selectedDiets
@@ -95,7 +90,8 @@ const Home = () => {
         )}. Please provide the answer in the form of strictly JSON array, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
 
       const result = await model_text.generateContent([prompt]);
-      const response = await result.response.candidates[0].content.parts[0].text;
+      const response = await result.response.candidates[0].content.parts[0]
+        .text;
       console.log(response);
       setRecipe(JSON.parse(response));
     } catch (error) {
@@ -153,8 +149,7 @@ const Home = () => {
       {loading === true && search !== "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
       ) : (
-        <div style={{ margin: "30px 0" }}>
-        </div>
+        <div style={{ margin: "30px 0" }}></div>
       )}
       <button
         className="btn btn-large btn-open"
@@ -173,7 +168,8 @@ const Home = () => {
         <DietFilters diets={diets} onDietChange={handleDietChange} />
         <div>
           <p>
-            Have other allergies? No worries! Tell us you want to avoid these food:
+            Have other allergies? No worries! Tell us you want to avoid these
+            food:
           </p>
           <input
             placeholder="Last time record"
