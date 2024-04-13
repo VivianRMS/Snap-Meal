@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import Home from "./components/Homepage";
+import Upload from "./components/upload";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
     // </div>
     <div className="App">
       <Home />
+      <Upload />
     </div>
   );
 }

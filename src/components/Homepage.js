@@ -46,6 +46,8 @@ const Home = () => {
   const [recipes, setRecipe] = useState(result_schedule);
   const [loading, setLoading] = useState(false);
 
+  const [showAddFood, setShowAddFood] = useState(false);
+
   const handleChangeSearch = (e) => {
     setSearch(e.target.value);
   };
@@ -155,7 +157,19 @@ const Home = () => {
           <p>{aiResponse}</p>
         </div>
       )}
-      <div>
+      <button
+        className="btn btn-large btn-open"
+        onClick={() => setShowAddFood((show) => !show)}
+      >
+        {showAddFood ? "Close" : "Add food!"}
+      </button>
+      {showAddFood ? (
+        <NewFoodForm
+          foods={foods}
+          setfoods={setfoods}
+          setShowAddFood={setShowAddFood}
+        />
+      ) : null}      <div>
         <DietFilters diets={diets} onDietChange={handleDietChange} />
       </div>
 
@@ -164,6 +178,71 @@ const Home = () => {
   );
 };
 
+function NewFoodForm({ foods, setfoods, setShowAddFood }) {
+  const [name, setName] = useState("");
+  const [count, setCount] = useState(0);
+  const [isUpLoading, setIsUpLoading] = useState(false);
+  const [purchaseDate, setPurchaseDate] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+
+  async function handleSubmit(e) {
+    setIsUpLoading(true);
+    const newfood = {
+      id: foods.length,
+      name: name,
+      count: count,
+      purchaseDate: purchaseDate,
+      expirationDate: expirationDate,
+    };
+
+    setfoods((foods) => [...foods, newfood]);
+
+    //5. Reset input fields
+    setName("");
+    setCount(0);
+
+    //6. Close the form
+    setShowAddFood(false);
+    setIsUpLoading(false);
+  }
+
+  return (
+    <form className="food-form" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="What's your food?"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        disabled={isUpLoading}
+      />
+      <input
+        type="number"
+        placeholder="How many do you buy?"
+        value={count}
+        onChange={(e) => setCount(e.target.value)}
+        disabled={isUpLoading}
+      />
+      <input
+        type="date"
+        placeholder="Purchase Date"
+        value={purchaseDate}
+        onChange={(e) => setPurchaseDate(e.target.value)}
+        disabled={isUpLoading}
+      />
+      <input
+        type="date"
+        placeholder="Expiration Date"
+        value={expirationDate}
+        onChange={(e) => setExpirationDate(e.target.value)}
+        disabled={isUpLoading}
+      />
+      <button className="btn btn-large" disabled={isUpLoading}>
+        Post
+      </button>
+    </form>
+  );
+}
+
 function FoodList({ foods, setfoods }) {
   if (foods.length === 0) {
     return <p className="message">No foods Now. Upload a photo to add!</p>;
@@ -171,7 +250,7 @@ function FoodList({ foods, setfoods }) {
 
   return (
     <section>
-      <ul className="facts-list">
+      <ul className="food-list">
         {foods.map((food) => (
           <Food key={food.id} food={food} setfoods={setfoods} />
         ))}
@@ -184,13 +263,14 @@ function FoodList({ foods, setfoods }) {
 function Food({ food, setfoods }) {
   const [isUpdating, setIsUpdating] = useState(false);
   async function handleChange(columnName) {
+    setIsUpdating(true);
     if (columnName === "add") {
       setfoods((foods) =>
         foods.map((f) =>
           f.id === food.id ? { ...food, count: food.count + 1 } : f
         )
       );
-    } else {
+    } else if (columnName === "minus") {
       if (food.count === 1) {
         setfoods((foods) => foods.filter((f) => f.id !== food.id));
       }
@@ -199,7 +279,10 @@ function Food({ food, setfoods }) {
           f.id === food.id ? { ...food, count: food.count - 1 } : f
         )
       );
+    } else {
+      setfoods((foods) => foods.filter((f) => f.id !== food.id));
     }
+    setIsUpdating(false);
   }
 
   return (
@@ -217,6 +300,11 @@ function Food({ food, setfoods }) {
         </button>
         <button onClick={() => handleChange("minus")} disabled={isUpdating}>
           -
+        </button>
+      </div>
+      <div className="confirm-button">
+        <button onClick={() => handleChange("delete")} disabled={isUpdating}>
+          Delete
         </button>
       </div>
     </li>
