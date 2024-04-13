@@ -43,7 +43,7 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [aiResponse, setResponse] = useState("");
   const [foods, setfoods] = useState(testfoods);
-  const [recipes, setRecipe] = useState(testfoods);
+  const [recipes, setRecipe] = useState(result_schedule);
   const [loading, setLoading] = useState(false);
 
   const handleChangeSearch = (e) => {
@@ -55,7 +55,7 @@ const Home = () => {
   async function aiRun() {
     setLoading(true);
     const prompt = `random meals related to ${search} category with images and prices`;
-    const result = await model.generateContent([prompt]);
+    const result = await model_text.generateContent([prompt]);
     const response = await result.response;
     const text = response.text();
     setResponse(text);
@@ -65,28 +65,6 @@ const Home = () => {
   const handleClick = () => {
     aiRun();
   };
-
-  // async function generateRecipe() {
-  //   // try {
-  //   //setLoading(true);
-
-  //   // Create a detailed prompt for the model
-  //   const prompt = `Generate a 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
-  //     .map((food) => `${food.name} (expires on ${food.expirationDate})`)
-  //     .join(
-  //       ", "
-  //     )}. Please provide the answer in the form of an array [{recipeName, numberIn14Days}].`;
-
-  //   const result_schedule = await model.generateContent(prompt);
-  //   const text = await result_schedule.toString();
-  //   setRecipe(text);
-  //   // } catch (error) {
-  //   //   console.error("Failed to generate schedule", error);
-  //   //   setRecipe("Error generating schedule.");
-  //   // } finally {
-  //   //   //setLoading(false);
-  //   // }
-  // }
 
   async function generateRecipe() {
     setLoading(true);
@@ -103,8 +81,8 @@ const Home = () => {
           ", "
         )}. Please provide the answer in the form of an array [{recipeName, recipeDescription, numberIn14Days}].`;
 
-      result_schedule = await model_text.generateContent(prompt);
-
+      const result = await model_text.generateContent(prompt);
+      setRecipe(result);
       //const text = await result_schedule.text();
       // setRecipe(text);
     } catch (error) {
@@ -114,6 +92,9 @@ const Home = () => {
       setLoading(false); 
     }
   }
+  const handleClick2 = () => {
+    generateRecipe();
+  };
 
   return (
     <div>
@@ -127,6 +108,9 @@ const Home = () => {
         />
         <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
           Search
+        </button>
+        <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
+          generate
         </button>
       </div>
 
