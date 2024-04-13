@@ -3,10 +3,17 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI("AIzaSyAqmfslqSGlrqWbSllhR5ce0NPD2hxMuGs");
 const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+const model_text = genAI.getGenerativeModel({ model: "gemini-pro" });
 
 const now_date = new Date();
 const exp_date = new Date(now_date);
 exp_date.setDate(exp_date.getDate() + 3);
+
+
+const result_schedule = [
+  { recipeName: "", recipeDescription: "", numberIn14Days: 0 },
+];
+
 
 const testfoods = [
   {
@@ -36,6 +43,7 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [aiResponse, setResponse] = useState("");
   const [foods, setfoods] = useState(testfoods);
+  const [recipes, setRecipe] = useState(testfoods);
   const [loading, setLoading] = useState(false);
 
   const handleChangeSearch = (e) => {
@@ -58,6 +66,55 @@ const Home = () => {
     aiRun();
   };
 
+  // async function generateRecipe() {
+  //   // try {
+  //   //setLoading(true);
+
+  //   // Create a detailed prompt for the model
+  //   const prompt = `Generate a 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
+  //     .map((food) => `${food.name} (expires on ${food.expirationDate})`)
+  //     .join(
+  //       ", "
+  //     )}. Please provide the answer in the form of an array [{recipeName, numberIn14Days}].`;
+
+  //   const result_schedule = await model.generateContent(prompt);
+  //   const text = await result_schedule.toString();
+  //   setRecipe(text);
+  //   // } catch (error) {
+  //   //   console.error("Failed to generate schedule", error);
+  //   //   setRecipe("Error generating schedule.");
+  //   // } finally {
+  //   //   //setLoading(false);
+  //   // }
+  // }
+
+  async function generateRecipe() {
+    setLoading(true);
+    try {
+      // Format the expiration dates as strings for the prompt
+      const prompt = `Generate a evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
+        .map(
+          (food) =>
+            `${food.name} (expires on ${food.expirationDate
+              .toISOString()
+              .substring(0, 10)})`
+        )
+        .join(
+          ", "
+        )}. Please provide the answer in the form of an array [{recipeName, recipeDescription, numberIn14Days}].`;
+
+      result_schedule = await model_text.generateContent(prompt);
+
+      //const text = await result_schedule.text();
+      // setRecipe(text);
+    } catch (error) {
+      console.error("Failed to generate schedule", error);
+      setRecipe("Error generating schedule: " + error.message);
+    } finally {
+      setLoading(false); 
+    }
+  }
+
   return (
     <div>
       <h1>Generative AI Restaurant App!</h1>
@@ -73,7 +130,7 @@ const Home = () => {
         </button>
       </div>
 
-      {loading == true && search != "" ? (
+      {loading === true && search !== "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
       ) : (
         <div style={{ margin: "30px 0" }}>
@@ -102,6 +159,7 @@ function FoodList({ foods, setfoods }) {
     </section>
   );
 }
+
 
 function Food({ food, setfoods }) {
   const [isUpdating, setIsUpdating] = useState(false);
