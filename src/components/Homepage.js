@@ -150,10 +150,6 @@ const Home = () => {
       </header>
       <AiwithImage start_id={foods.length} setfoods={setfoods} />
 
-      <button style={{ marginLeft: "20px" }} onClick={() => handleClick2()}>
-        Regenerate
-      </button>
-
       {loading === true && search !== "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
       ) : (
@@ -191,7 +187,6 @@ const Home = () => {
           </button>
         </div>
       </div>
-      <DietFilters diets={diets} onDietChange={handleDietChange} />
 
       <FoodList foods={foods} setfoods={setfoods} />
       <Planner recipeArrayProp={recipes} />
