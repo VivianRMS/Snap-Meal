@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import Planner from "./weeklyplanner";
 
 const genAI = new GoogleGenerativeAI("AIzaSyAqmfslqSGlrqWbSllhR5ce0NPD2hxMuGs");
 const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
@@ -10,9 +11,13 @@ const exp_date = new Date(now_date);
 exp_date.setDate(exp_date.getDate() + 3);
 
 
-const result_schedule = [
-  { recipeName: "", recipeDescription: "", numberIn14Days: 0 },
-];
+const recipeTemplate = {
+  recipeName: "",
+  recipeDescription: "",
+  numberIn14Days: 0,
+};
+
+const result_schedule = Array.from({ length: 14 }, () => ({ ...recipeTemplate }));
 
 
 const testfoods = [
@@ -72,26 +77,20 @@ const Home = () => {
     setLoading(true);
     try {
       // Format the expiration dates as strings for the prompt
-      const prompt = `Generate an evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
+      const prompt = `Generate a evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
         .map(
           (food) =>
             `${food.name} (expires on ${food.expirationDate
               .toISOString()
               .substring(0, 10)})`
         )
-        .join(", ")}, and restricted to the diet type${
-        selectedDiets.length > 1 ? "s" : ""
-      } ${selectedDiets
-        .join(", ")
-        .replace(
-          /, ([^,]*)$/,
-          " and $1"
-        )}. Please provide the answer in the form of an array [{recipeName, recipeDescription, numberIn14Days}].`;
+        .join(
+          ", "
+        )}. Please provide the answer in the form of strictly JSON string, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
+      const result = await model_text.generateContent([prompt]);
+      const response = await result.response.candidates[0].content.parts[0].text;
 
-      const result = await model_text.generateContent(prompt);
-      setRecipe(result);
-      //const text = await result_schedule.text();
-      // setRecipe(text);
+      setRecipe(JSON.parse(response));
     } catch (error) {
       console.error("Failed to generate schedule", error);
       setRecipe("Error generating schedule: " + error.message);
@@ -174,6 +173,7 @@ const Home = () => {
       </div>
 
       <FoodList foods={foods} setfoods={setfoods} />
+      <Planner recipeArrayProp={recipes} />
     </div>
   );
 };
