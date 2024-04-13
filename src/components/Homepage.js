@@ -20,6 +20,7 @@ const recipeTemplate = {
 const result_schedule = Array.from({ length: 14 }, () => ({
   ...recipeTemplate,
 }));
+
 const CATEGORIES = [
   { name: "food", color: "#3b82f6" },
   { name: "receipe", color: "#16a34a" },
@@ -52,6 +53,7 @@ const testfoods = [
 const Home = () => {
   const [search, setSearch] = useState("");
   const [allergies, setAllergies] = useState("");
+  const [lovedFood, setLovedFood] = useState("");
   const [foods, setfoods] = useState([]);
   const [recipes, setRecipe] = useState(result_schedule);
   const [loading, setLoading] = useState(false);
@@ -72,8 +74,22 @@ const Home = () => {
     setLoading(false);
   }
 
+  async function changeLoveFoods() {
+    setLoading(true);
+    setLovedFood(search);
+    setLoading(false);
+  }
+
   const handleClick = () => {
     changeAllergies();
+  };
+
+  const handleClick2 = () => {
+    generateRecipe();
+  };
+
+  const handleClick3 = () => {
+    changeLoveFoods();
   };
 
   async function generateRecipe() {
@@ -89,7 +105,7 @@ const Home = () => {
         .replace(
           /, ([^,]*)$/,
           " and $1"
-        )}. Also strictly avoid foods in ${allergies}. Please provide the answer in the form of strictly JSON array, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
+        )}. Also strictly avoid foods in ${allergies}. Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe), 'day'(day of each recipe range from 1 to 14). Make Sure the JSON is valid,but do not write '''json before json array`;
 
       const result = await model_text.generateContent([prompt]);
       const response = await result.response.candidates[0].content.parts[0]
@@ -103,9 +119,6 @@ const Home = () => {
       setLoading(false);
     }
   }
-  const handleClick2 = () => {
-    generateRecipe();
-  };
 
   const appTitle = "Food Planner";
 
@@ -199,7 +212,21 @@ const Home = () => {
                 >
                   Regenerate
                 </button>
-                <p>{allergies}</p>
+                <p>Last Saved: {allergies}</p>
+              </div>
+              <div>
+                <p>Have something really need to eat?</p>
+                <input
+                  placeholder="what do you want to eat?"
+                  onChange={(e) => handleChangeSearch(e)}
+                />
+                <button
+                  style={{ marginLeft: "20px" }}
+                  onClick={() => handleClick3()}
+                >
+                  Confirm
+                </button>
+                <p>Favorite foods: {lovedFood}</p>
               </div>
             </div>
             <Planner recipeArrayProp={recipes} />
@@ -323,7 +350,9 @@ function Food({ food, setfoods }) {
     if (columnName === "add") {
       setfoods((foods) =>
         foods.map((f) =>
-          f.id === food.id ? { ...food, count: food.count + 1 } : f
+          f.id === food.id
+            ? { ...food, count: parseInt(food.count, 10) + 1 }
+            : f
         )
       );
     } else if (columnName === "minus") {
@@ -332,7 +361,9 @@ function Food({ food, setfoods }) {
       }
       setfoods((foods) =>
         foods.map((f) =>
-          f.id === food.id ? { ...food, count: food.count - 1 } : f
+          f.id === food.id
+            ? { ...food, count: parseInt(food.count, 10) - 1 }
+            : f
         )
       );
     } else {
