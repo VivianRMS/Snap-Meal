@@ -66,7 +66,7 @@ const Home = () => {
 
   async function changeAllergies() {
     setLoading(true);
-    setAllergies("${search}");
+    setAllergies(search);
     setLoading(false);
   }
 
@@ -181,6 +181,7 @@ const Home = () => {
           <button style={{ marginLeft: "20px" }} onClick={() => handleClick2()}>
             Regenerate
           </button>
+          <p>{allergies}</p>
         </div>
       </div>
 
