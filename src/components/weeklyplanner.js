@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-function Planner() {
+function Planner(recipeArrayProp) {
   const [recipeArray, setRecipeArray] = useState([]);
+  const [recipes, setRecipes] = useState([]);
   const [tooltipContent, setTooltipContent] = useState(""); // State to manage tooltip content
   const [tooltipVisible, setTooltipVisible] = useState(false); // State to manage tooltip visibility
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 }); // State to manage tooltip position
@@ -36,13 +37,15 @@ function Planner() {
   useEffect(() => {
     // Define a function to create the biweekly planner
     function createBiweeklyPlanner(dataArray) {
+
       const weeks = [];
       for (let week = 0; week < 2; week++) {
         const days = [];
         const daynums = [];
         for (let day = 1; day <= 7; day++) {
           const index = day + week * 7 - 1;
-          const recipe = dataArray[index];
+          const recipe = dataArray.recipeArrayProp[index];
+          console.log(recipe)
           const isStarred = starredRecipes.has(index);
           daynums.push(
             <td key={`daynum-${index}`}>
@@ -50,12 +53,12 @@ function Planner() {
             </td>
           );
           days.push(
-            <td key={`recipe-${index}`} onMouseEnter={(e) => handleRecipeHover(recipe, e)} onMouseLeave={handleRecipeHoverLeave}>
-              <div>
-                <span>{recipe}</span>
-                <button onClick={() => handleStarClick(index)}>{isStarred ? '★' : '☆'}</button>
-              </div>
-            </td>
+            <td key={`recipe-${index}`} onMouseEnter={(e) => handleRecipeHover(recipe.recipeDescription, e)} onMouseLeave={handleRecipeHoverLeave}>
+            <div>
+              <span>{recipe.recipeName}</span>
+              <button onClick={() => handleStarClick(index)}>{isStarred ? '★' : '☆'}</button>
+            </div>
+          </td>
           );
         }
         weeks.push(
@@ -77,8 +80,9 @@ function Planner() {
 
 
     // Create the biweekly planner table
-    setRecipeArray(createBiweeklyPlanner(recipeArray));
-  }, [starredRecipes]); // Include starredRecipes in the dependency array
+    setRecipeArray(createBiweeklyPlanner(recipeArrayProp));
+  }, [starredRecipes,recipeArrayProp]); // Include starredRecipes in the dependency array
+
 
   return (
     <div>
