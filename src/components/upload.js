@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getBase64 } from "../helpers/imageHelper";
 
-const AiwithImage = () => {
+const AiwithImage = ({ start_id, setfoods }) => {
   const genAI = new GoogleGenerativeAI(
     "AIzaSyAJcTSS_Ru7jk7dl03P-4e3ZVaG28bnNms"
   );
@@ -12,6 +12,9 @@ const AiwithImage = () => {
   const [aiResponse, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // const start_id = foods.length;
+  // console.log(start_id);
+
   /**
    * Generative AI Call to fetch image insights
    */
@@ -20,11 +23,12 @@ const AiwithImage = () => {
     setResponse("");
     const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
     const result = await model.generateContent([
-      "What food are in the picture? Only return a dictionary with the food name as the key, 'purchaseDate' and 'expirationDate' as values. The purchaseDate will be the current date of the picture being uploaded in the formate of year-month-day, for exmaple today is 2024-04-13, and the expiration date will be the general expiration date of the food. For example, red peppers are in the graph, the purchase date will be April 13, 2024 and the general expiration date of red peppers is about 7 days, so the expiration date of it will be April 20,2024",
+      `What food are in the picture? Only return a JSON array with 'id' incrementing from ${start_id} (for example, if start_id is 3, then the first id will be 4), 'name' (name of each food), 'count' (count of each food), 'purchaseDate' and 'expirationDate' as values. The purchaseDate will be the current date of the picture being uploaded in the formate of year-month-day, for exmaple today is 2024-04-13, and the expiration date will be the general expiration date of the food. For example, red peppers are in the graph, the purchase date will be April 13, 2024 and the general expiration date of red peppers is about 7 days, so the expiration date of it will be April 20,2024. Make Sure the JSON is valid.`,
       imageInineData,
     ]);
     const response = await result.response;
-    const text = response.text();
+    const text = await response.text();
+    setfoods((foods) => [...foods, ...JSON.parse(text)]);
     setResponse(text);
     setLoading(false);
   }

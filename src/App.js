@@ -23,7 +23,6 @@ function App() {
     // </div>
     <div className="App">
       <Home />
-      <Upload />
     </div>
   );
 }

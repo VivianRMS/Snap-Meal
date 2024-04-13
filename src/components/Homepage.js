@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import AiwithImage from "./upload";
+import Planner from "./weeklyplanner";
 
 const genAI = new GoogleGenerativeAI("AIzaSyAqmfslqSGlrqWbSllhR5ce0NPD2hxMuGs");
 const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
@@ -9,9 +11,18 @@ const now_date = new Date();
 const exp_date = new Date(now_date);
 exp_date.setDate(exp_date.getDate() + 3);
 
+const recipeTemplate = {
+  recipeName: "",
+  recipeDescription: "",
+  numberIn14Days: 0,
+};
 
-const result_schedule = [
-  { recipeName: "", recipeDescription: "", numberIn14Days: 0 },
+const result_schedule = Array.from({ length: 14 }, () => ({
+  ...recipeTemplate,
+}));
+const CATEGORIES = [
+  { name: "food", color: "#3b82f6" },
+  { name: "receipe", color: "#16a34a" },
 ];
 
 const testfoods = [
@@ -19,29 +30,29 @@ const testfoods = [
     id: 1,
     name: "apple",
     count: 3,
-    purchaseDate: now_date,
-    expirationDate: exp_date,
+    purchaseDate: "2023",
+    expirationDate: "2023",
   },
   {
     id: 2,
     name: "pork belly",
     count: 2,
-    purchaseDate: now_date,
-    expirationDate: exp_date,
+    purchaseDate: "2023",
+    expirationDate: "2023",
   },
   {
     id: 3,
     name: "spinach",
     count: 1,
-    purchaseDate: now_date,
-    expirationDate: exp_date,
+    purchaseDate: "2023",
+    expirationDate: "2023",
   },
 ];
 
 const Home = () => {
   const [search, setSearch] = useState("");
   const [allergies, setAllergies] = useState("");
-  const [foods, setfoods] = useState(testfoods);
+  const [foods, setfoods] = useState([]);
   const [recipes, setRecipe] = useState(result_schedule);
   const [loading, setLoading] = useState(false);
 
@@ -67,7 +78,7 @@ const Home = () => {
     setLoading(true);
     try {
       // Format the expiration dates as strings for the prompt
-      const prompt = `Generate an evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
+      const prompt = `Generate a evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${testfoods
         .map(
           (food) =>
             `${food.name} (expires on ${food.expirationDate
@@ -81,12 +92,13 @@ const Home = () => {
         .replace(
           /, ([^,]*)$/,
           " and $1"
-        )}. Please avoid foods in ${allergies} Please provide the answer in the form of an array [{recipeName, recipeDescription, numberIn14Days}].`;
+        )}. Please provide the answer in the form of strictly JSON array, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
 
-      const result = await model_text.generateContent(prompt);
       setRecipe(result);
-      //const text = await result_schedule.text();
-      // setRecipe(text);
+      const result = await model_text.generateContent([prompt]);
+      const response = await result.response.candidates[0].content.parts[0].text;
+      console.log(response);
+      setRecipe(JSON.parse(response));
     } catch (error) {
       console.error("Failed to generate schedule", error);
       setRecipe("Error generating schedule: " + error.message);
@@ -97,6 +109,8 @@ const Home = () => {
   const handleClick2 = () => {
     generateRecipe();
   };
+
+  const appTitle = "Food Planner";
 
   const [diets, setDiets] = useState([
     { type: "Vegan Diet", isSelected: false },
@@ -129,20 +143,18 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Generative AI Restaurant App!</h1>
-      <p>Built with ❤️ using ReactJS + Redux + Google Gemini</p>
-      <div style={{ display: "flex" }}>
-        <input
-          placeholder="Search Food with Category using Generative AI"
-          onChange={(e) => handleChangeSearch(e)}
-        />
-        <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
-          Search
-        </button>
-        <button style={{ marginLeft: "20px" }} onClick={() => handleClick2()}>
-          Regenerate
-        </button>
-      </div>
+      <header className="header">
+        <div className="logo">
+          {/* <img src="logo.png" height="68" width="68" alt="Today I Learned Logo" /> */}
+          <h1>{appTitle}</h1>
+        </div>
+      </header>
+      <AiwithImage start_id={foods.length} setfoods={setfoods} />
+
+      <button style={{ marginLeft: "20px" }} onClick={() => handleClick2()}>
+        Regenerate
+      </button>
+
       {loading === true && search !== "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
       ) : (
@@ -180,10 +192,17 @@ const Home = () => {
           </button>
         </div>
       </div>
+      <DietFilters diets={diets} onDietChange={handleDietChange} />
+
       <FoodList foods={foods} setfoods={setfoods} />
+      <Planner recipeArrayProp={recipes} />
     </div>
   );
 };
+
+function Loader() {
+  return <p className="message">Loading ...</p>;
+}
 
 function NewFoodForm({ foods, setfoods, setShowAddFood }) {
   const [name, setName] = useState("");
@@ -297,8 +316,8 @@ function Food({ food, setfoods }) {
       <p>{food.name}</p>
       <div className="food-description">
         <span className="tag">{food.count}</span>
-        <span className="tag">{food.purchaseDate.toLocaleString()}</span>
-        <span className="tag">{food.expirationDate.toLocaleString()}</span>
+        <span className="tag">{food.purchaseDate}</span>
+        <span className="tag">{food.expirationDate}</span>
       </div>
 
       <div className="change-buttons">
