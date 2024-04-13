@@ -86,10 +86,10 @@ const Home = () => {
         )
         .join(
           ", "
-        )}. Please provide the answer in the form of strictly JSON string, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
+        )}. Please provide the answer in the form of strictly JSON array, make JSON valid: an array [{recipeName, recipeDescription, numberIn14Days}]. only give the array, the array has 14 items, if one day i is empty, then there is write {"","",i}, try to start fill the array from the beginning`;
       const result = await model_text.generateContent([prompt]);
       const response = await result.response.candidates[0].content.parts[0].text;
-
+      console.log(response)
       setRecipe(JSON.parse(response));
     } catch (error) {
       console.error("Failed to generate schedule", error);
