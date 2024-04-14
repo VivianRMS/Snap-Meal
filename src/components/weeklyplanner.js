@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 function Planner({ recipeArrayProp, days, num_recipe }) {
   const [recipeArray, setRecipeArray] = useState([]);
-  const [recipes, setRecipes] = useState([]);
   const [tooltipContent, setTooltipContent] = useState(""); // State to manage tooltip content
   const [tooltipVisible, setTooltipVisible] = useState(false); // State to manage tooltip visibility
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 }); // State to manage tooltip position
@@ -24,8 +23,9 @@ function Planner({ recipeArrayProp, days, num_recipe }) {
   };
 
   // Function to handle star click
-  const handleStarClick = (index) => {
+  const handleStarClick = (dayIndex, recipeIndex) => {
     const newStarredRecipes = new Set(starredRecipes);
+    const index = dayIndex * num_recipe + recipeIndex;
     if (newStarredRecipes.has(index)) {
       newStarredRecipes.delete(index);
     } else {
@@ -35,54 +35,25 @@ function Planner({ recipeArrayProp, days, num_recipe }) {
   };
 
   useEffect(() => {
-    // Define a function to create the biweekly planner
+    // Define a function to create the planner
     function createPlanner(dataArray, days, num_recipe) {
       if (dataArray.length === 0) return [];
-      console.log(dataArray);
-      let recipe_sum = [];
+      const recipe_sum = [];
       try {
         for (let index = 0; index < dataArray.length; index += num_recipe) {
           let chunk = dataArray.slice(index, index + num_recipe);
           recipe_sum.push(chunk);
         }
-        // for (let i = 0; i < days; i++) {
-        //   const day_recipe = [];
-        //   for (let j = 0; j < num_recipe; j++) {
-        //     const index = i + j;
-        //     day_recipe.push(dataArray[index]);
-        //     console.log(day_recipe);
-        //     const isStarred = starredRecipes.has(index);
-        //   days.push(
-        //     <td
-        //       key={`recipe-${index}`}
-        //       onMouseEnter={(e) =>
-        //         handleRecipeHover(recipe.recipeDescription, e)
-        //       }
-        //       onMouseLeave={handleRecipeHoverLeave}
-        //     >
-        //       <div>
-        //         <span>{recipe.recipeName}</span>
-        //         <button onClick={() => handleStarClick(index)}>
-        //           {isStarred ? "★" : "☆"}
-        //         </button>
-        //       </div>
-        //     </td>
-        //   );
-        //   }
-        //   recipe_sum.push(day_recipe);
-        //   console.log(recipe_sum);
-        // }
-        console.log(recipe_sum);
       } catch (error) {
-        console.error("wrong with return receipe, please try generate again");
-        recipe_sum.push("generate failed, please generage again");
+        console.error("Wrong with return recipe, please try generating again");
+        recipe_sum.push("Generate failed, please generate again");
       }
       return recipe_sum;
     }
 
-    // Create the biweekly planner table
+    // Create the planner table
     setRecipeArray(createPlanner(recipeArrayProp, days, num_recipe));
-  }, [starredRecipes, recipeArrayProp]); // Include starredRecipes in the dependency array
+  }, [recipeArrayProp, days, num_recipe]);
 
   return (
     <div>
@@ -93,9 +64,9 @@ function Planner({ recipeArrayProp, days, num_recipe }) {
             {recipeList.map((recipe, index) => (
               <div key={index}>
                 <h3>{recipe.recipeName}</h3>
-                {/* <button onClick={() => handleStarClick(index)}>
-                  {isStarred ? "★" : "☆"}
-                </button> */}
+                <button onClick={() => handleStarClick(listIndex, index)}>
+                  {starredRecipes.has(listIndex * num_recipe + index) ? "★" : "☆"}
+                </button>
 
                 <p>
                   <strong>Description:</strong>{" "}
