@@ -197,8 +197,8 @@ const Home = () => {
               <DietFilters diets={diets} onDietChange={handleDietChange} />
               <div>
                 <p>
-                  Have other allergies? No worries! Tell us you want to avoid
-                  these food:
+                  Have other allergies? No worries!
+                  <p>Tell us you want to avoid these food(ONLY food names):</p>
                 </p>
                 <input
                   placeholder="Last time record"
@@ -210,7 +210,7 @@ const Home = () => {
                 >
                   Confirm
                 </button>
-                 /* Input fields for selecting day and recipe count */}
+                /* Input fields for selecting day and recipe count */}
                 <label htmlFor="day">Select Day:</label>
                 <input
                   type="number"
@@ -225,15 +225,18 @@ const Home = () => {
                   value={recipeCount}
                   onChange={(e) => setRecipeCount(parseInt(e.target.value))}
                 />
-                  <button style={{ marginLeft: "20px" }} onClick={() => handleClick2()}>
-                    Regenerate
-                  </button>
+                <button
+                  style={{ marginLeft: "20px" }}
+                  onClick={() => handleClick2()}
+                >
+                  Regenerate
+                </button>
                 <p>Last Saved: {allergies}</p>
               </div>
               <div>
-                <p>Have something really need to eat?</p>
+                <p>Have something really want to eat?</p>
                 <input
-                  placeholder="what do you want to eat?"
+                  placeholder="what do you want?"
                   onChange={(e) => handleChangeSearch(e)}
                 />
                 <button
