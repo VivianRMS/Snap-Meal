@@ -168,8 +168,8 @@ const Home = () => {
               <DietFilters diets={diets} onDietChange={handleDietChange} />
               <div>
                 <p>
-                  Have other allergies? No worries! Tell us you want to avoid
-                  these food:
+                  Have other allergies? No worries!
+                  <p>Tell us you want to avoid these food(ONLY food names):</p>
                 </p>
                 <input
                   placeholder="Last time record"
@@ -181,7 +181,6 @@ const Home = () => {
                 >
                   Confirm
                 </button>
-
                 <label htmlFor="day">Select Day:</label>
                 <input
                   type="number"
@@ -205,9 +204,9 @@ const Home = () => {
                 <p>Last Saved: {allergies}</p>
               </div>
               <div>
-                <p>Have something really need to eat?</p>
+                <p>Have something really want to eat?</p>
                 <input
-                  placeholder="what do you want to eat?"
+                  placeholder="what do you want?"
                   onChange={(e) => handleChangeSearch(e)}
                 />
                 <button
@@ -216,7 +215,7 @@ const Home = () => {
                 >
                   Confirm
                 </button>
-                <p>Favorite foods: {lovedFood}</p>
+                    <p>Favorite foods: {lovedFood}</p>
               </div>
             </div>
             <Planner
