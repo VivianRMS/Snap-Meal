@@ -2,6 +2,8 @@
 
 Snap❤Meal was inspired by the everyday challenges of home cooking. How often do we find ourselves standing in front of an open fridge, staring at a pile of groceries, yet unsure of what to make? Even worse, discovering that some items have already expired, and throwing them to trash. This not only leads to stress but also contributes to the pressing issue of food waste. Moreover, accommodating various dietary preferences, like veganism or ketogenic diets, can require more thought when planning meals for guests. Snap❤Meal aims to address these challenges by revolutionizing how we approach cooking. Our app empowers users to effortlessly create gourmet meals from their grocery hauls, minimizing waste and maximizing culinary enjoyment.
 
+[Demo](https://www.youtube.com/watch?v=2w96Dpqqt2M)
+
 
 ## What it does
 
@@ -47,5 +49,3 @@ Continuous Innovation and Improvement: At Snap❤Meal, we're committed to delive
 Expansion of Recipe Variety and Customization Options: We're dedicated to enriching our recipe database with an even wider array of culinary delights. From international cuisines to serving sizes, we aim to cater to every palate and preference.
 
 Community Engagement and Collaboration: We're committed to fostering a vibrant community of home cooks on Snap❤Meal, with collaborative recipe sharing, cooking challenges, and interactive forums. We plan to implement a user database. This will enable us to store user preferences, past activities, and other essential information securely.
-
-[Demo](https://www.youtube.com/watch?v=2w96Dpqqt2M)
