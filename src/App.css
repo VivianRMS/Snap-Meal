@@ -180,7 +180,7 @@ ul {
 .btn-large {
   font-size: 25px;
   padding: 10px 20px 10px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .btn-all-categories {
@@ -239,10 +239,17 @@ ul {
   align-items: center;
   /* gap: 16px; */
   border-radius: 16px;
+  font-size: 20px;
   -webkit-border-radius: 16px;
   -moz-border-radius: 16px;
   -ms-border-radius: 16px;
   -o-border-radius: 16px;
+}
+
+.day-selection 
+{
+  display: flex;
+  gap: 10px
 }
 
 .food-form-input {
@@ -272,6 +279,12 @@ ul {
   font-family: inherit;
 }
 
+.day-selection input {
+  width: 80px;
+  height: 30px;
+  padding: 10px;
+}
+
 .food-form input::placeholder {
   color: #a8a29e;
 }
@@ -283,6 +296,12 @@ ul {
 .food-form span {
   font-weight: 600;
   font-size: 18px;
+}
+
+.food-instruction {
+  font-size: 23px;
+  margin:10px;
+  font-weight: bold;
 }
 
 @media (max-width: 1000px) {
@@ -322,4 +341,94 @@ input[type="file"]{
   font-family: inherit;
   font-weight: 600;
   cursor: pointer;
+}
+
+.preference-form{
+  display: flex;
+  gap: 16px;
+  /* margin: 10px; */
+  margin-bottom: 15px;
+}
+
+.diet {
+  margin:10px;
+  font-size: 20px;
+
+}
+
+.checkbox-custom {
+  position: relative;
+  padding-left: 26px;
+  cursor: pointer;
+  display: block; /* Change to block to make sure label takes a full line */
+  color: #ffffff; /* Adjust if needed */
+  margin: 10px; /* Spacing between each checkbox item */
+  margin-left: 15px;
+}
+
+.checkbox-custom input[type="checkbox"] {
+  opacity: 0; /* Hide the default checkbox */
+  position: absolute;
+  cursor: pointer;
+}
+
+.checkbox-custom .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #78716c; /* Background of the custom checkbox */
+  border-radius: 4px; /* Rounded corners */
+  margin-right: 20px;
+}
+
+.checkbox-custom:hover input ~ .checkmark {
+  background-color: #555; /* Darker when hovered */
+}
+
+.checkbox-custom input:checked ~ .checkmark {
+  background-color: #4CAF50; /* Color when checked */
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkbox-custom .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-custom input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-custom .checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+.header-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.divider {
+  width: 100%;
+  height: 5px;
+  background-color: #8f8989; /* Change color as needed */
+  margin: 20px 0; /* Adjust margin as needed */
+  margin-top: 2px;
+}
+
+.divider-name {
+  width: 100%;
+  height: 5px;
+  background-color: #8f8989; /* Change color as needed */
+  margin: 0px 0; /* Adjust margin as needed */
 }

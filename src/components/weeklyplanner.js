@@ -88,32 +88,7 @@ function Planner({ recipeArrayProp, days, num_recipe }) {
     <div>
       <div>
         {recipeArray.map((recipeList, listIndex) => (
-          <div key={listIndex}>
-            <h2>Day {listIndex + 1}</h2>
-            {recipeList.map((recipe, index) => (
-              <div key={index}>
-                <h3>{recipe.recipeName}</h3>
-                {/* <button onClick={() => handleStarClick(index)}>
-                  {isStarred ? "★" : "☆"}
-                </button> */}
-
-                <p>
-                  <strong>Description:</strong>{" "}
-                  {recipe.recipeDescription.replace(/\n/g, " ")}
-                </p>
-                <p>
-                  <strong>Ingredients:</strong>
-                </p>
-                <ul>
-                  {recipe.ingredients.map((ingredient, idx) => (
-                    <li key={idx}>
-                      {ingredient.food} - {ingredient.amount}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <DailyRecipe recipeList={recipeList} listIndex={listIndex} />
         ))}
       </div>
       {tooltipVisible && (
@@ -130,6 +105,44 @@ function Planner({ recipeArrayProp, days, num_recipe }) {
           {tooltipContent}
         </div>
       )}
+    </div>
+  );
+}
+
+function DailyRecipe({ recipeList, listIndex }) {
+  return (
+    <div key={listIndex} className="food-form">
+      <h2>Day {listIndex + 1}</h2>
+      <div className="divider"></div>
+      {recipeList.map((recipe, index) => (
+        <OneReceipe recipe={recipe} index={index} />
+      ))}
+    </div>
+  );
+}
+
+function OneReceipe({ recipe, index }) {
+  return (
+    <div key={index}>
+      <h3>{recipe.recipeName}</h3>
+      {/* <button onClick={() => handleStarClick(index)}>
+      {isStarred ? "★" : "☆"}
+    </button> */}
+
+      <p>
+        <strong>Description:</strong>{" "}
+        {recipe.recipeDescription.replace(/\n/g, " ")}
+      </p>
+      <p>
+        <strong>Ingredients:</strong>
+      </p>
+      <ul>
+        {recipe.ingredients.map((ingredient, idx) => (
+          <li key={idx}>
+            {ingredient.food} - {ingredient.amount}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

@@ -15,7 +15,7 @@ const result_schedule = [];
 
 const CATEGORIES = [
   { name: "food", color: "#3b82f6" },
-  { name: "receipe", color: "#16a34a" },
+  { name: "receipe", color: "#db2777" },
 ];
 
 const Home = () => {
@@ -24,11 +24,12 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [allergies, setAllergies] = useState("");
   const [lovedFood, setLovedFood] = useState("");
-  const [foods, setfoods] = useState(testfoods);
+  const [foods, setfoods] = useState([]);
   const [recipes, setRecipe] = useState(result_schedule);
   const [loading, setLoading] = useState(false);
   const [currentCatgory, setCurrentCategory] = useState("food");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPreference, setShowPreference] = useState(false);
 
   const [showAddFood, setShowAddFood] = useState(false);
 
@@ -163,59 +164,111 @@ const Home = () => {
           </div>
         ) : (
           <div>
-            <div style={{ display: "flex" }}>
-              <DietFilters diets={diets} onDietChange={handleDietChange} />
-              <div>
-                <p>
-                  Have other allergies? No worries!
-                  <p>Tell us you want to avoid these food(ONLY food names):</p>
-                </p>
-                <input
-                  placeholder="Last time record"
-                  onChange={(e) => handleChangeSearch(e)}
-                />
+            <div>
+              <div className="header-buttons">
                 <button
-                  style={{ marginLeft: "20px" }}
-                  onClick={() => handleClick()}
-                >
-                  Confirm
-                </button>
-                <label htmlFor="day">Select Day:</label>
-                <input
-                  type="number"
-                  id="day"
-                  value={selectedDay}
-                  onChange={(e) => setSelectedDay(parseInt(e.target.value, 10))}
-                />
-                <label htmlFor="recipeCount">Recipe Count per Day:</label>
-                <input
-                  type="number"
-                  id="recipeCount"
-                  value={recipeCount}
-                  onChange={(e) => setRecipeCount(parseInt(e.target.value, 10))}
-                />
-                <button
+                  className="btn btn-large"
                   style={{ marginLeft: "20px" }}
                   onClick={() => handleClick2()}
                 >
-                  Regenerate
+                  Generate Recipes
                 </button>
-                <p>Last Saved: {allergies}</p>
-              </div>
-              <div>
-                <p>Have something really want to eat?</p>
-                <input
-                  placeholder="what do you want?"
-                  onChange={(e) => handleChangeSearch(e)}
-                />
                 <button
-                  style={{ marginLeft: "20px" }}
-                  onClick={() => handleClick3()}
+                  className="btn btn-large"
+                  style={{
+                    backgroundColor: "#14b8a6",
+                    backgroundImage: "none",
+                  }}
+                  onClick={() => setShowPreference((show) => !show)}
                 >
-                  Confirm
+                  {showPreference ? "Close" : "Preference"}
                 </button>
-                <p>Favorite foods: {lovedFood}</p>
               </div>
+              {showPreference ? (
+                <div>
+                  <DietFilters diets={diets} onDietChange={handleDietChange} />
+                  <div>
+                    <div className="food-form">
+                      <div className="food-instruction">
+                        <p>Have other allergies? No worries!</p>
+                        <p>
+                          Tell us you want to avoid these food(ONLY food names):
+                        </p>
+                      </div>
+                      <div className="preference-form">
+                        <input
+                          placeholder="Last time record"
+                          onChange={(e) => handleChangeSearch(e)}
+                          style={{ flex: 9 }}
+                        />
+                        <button
+                          className="btn btn-category"
+                          style={{ backgroundColor: "#16a34a", flex: 1 }}
+                          onClick={() => handleClick()}
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                      <p
+                        className="food-instruction"
+                        style={{ fontSize: "20px", fontWeight: "normal" }}
+                      >
+                        Last Saved: {allergies}
+                      </p>
+                    </div>
+                    {/* <label htmlFor="day">Select Day:</label> */}
+                    <div className="food-form day-selection">
+                      <p className="food-instruction">Prepare meals for </p>
+                      <input
+                        type="number"
+                        id="day"
+                        value={selectedDay}
+                        onChange={(e) =>
+                          setSelectedDay(parseInt(e.target.value, 10))
+                        }
+                      />
+                      {/* <label htmlFor="recipeCount">Recipe Count per Day:</label> */}
+                      <p className="food-instruction">days.</p>
+                      <p className="food-instruction">Generate</p>
+                      <input
+                        type="number"
+                        id="recipeCount"
+                        value={recipeCount}
+                        onChange={(e) =>
+                          setRecipeCount(parseInt(e.target.value, 10))
+                        }
+                      />
+                      <p className="food-instruction">receipe(s) per day. </p>
+                    </div>
+                  </div>
+                  <div className="food-form">
+                    <p className="food-instruction">
+                      Have something really want to eat?
+                    </p>
+                    <div className="preference-form">
+                      <input
+                        placeholder="what do you want?"
+                        onChange={(e) => handleChangeSearch(e)}
+                        style={{ flex: 9 }}
+                      />
+                      <button
+                        className="btn btn-category"
+                        style={{ backgroundColor: "#16a34a", flex: 1 }}
+                        onClick={() => handleClick3()}
+                      >
+                        Confirm
+                      </button>
+                    </div>
+                    <p
+                      className="food-instruction"
+                      style={{ fontSize: "20px", fontWeight: "normal" }}
+                    >
+                      Favorite foods: {lovedFood}
+                    </p>
+                  </div>
+                  <div className="divider"></div>
+                </div>
+              ) : null}
             </div>
             <Planner
               recipeArrayProp={recipes}
@@ -459,19 +512,21 @@ const DietFilters = ({ diets, onDietChange }) => {
   };
 
   return (
-    <div>
-      <h3>Select Your Diet Type:</h3>
+    <div className="food-form">
+      <p className="food-instruction">Select Your Diet Type:</p>
       {diets.map((diet, index) => (
-        <div key={index}>
+        <label key={index} className="checkbox-custom">
           <input
             type="checkbox"
             id={diet.type}
             name={diet.type}
             checked={diet.isSelected}
             onChange={() => handleChange(diet)}
+            style={{ display: "none" }} // Hide the default checkbox
           />
-          <label htmlFor={diet.type}>{diet.type}</label>
-        </div>
+          <span className="checkmark"></span>
+          <p className="diet">{diet.type}</p>
+        </label>
       ))}
     </div>
   );
