@@ -119,7 +119,7 @@ h1 {
 .tag {
   text-transform: uppercase;
   font-size: 18px;
-  font-family: "Coiny", sans-serif;
+  font-family: inherit;
   padding-top: 3px;
   padding-left: 10px;
   padding-right: 10px;
