@@ -69,22 +69,35 @@ const AiwithImage = ({ start_id, setfoods }) => {
   return (
     <div>
       <div>
-        <div style={{ display: "flex" }}>
-          <input type="file" onChange={(e) => handleImageChange(e)} />
-          <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
+        <div className="food-form-photo">
+          <input type="file" title=" " onChange={(e) => handleImageChange(e)} />
+          <button
+            className="btn btn-large"
+            disabled={loading}
+            onClick={() => handleClick()}
+          >
+            {" "}
             Search
           </button>
         </div>
-        <img src={image} style={{ width: "30%", marginTop: 30 }} />
+        <img
+          src={image}
+          style={{
+            width: "30%",
+            marginTop: 10,
+            marginBottom: 15,
+            marginLeft: 15,
+          }}
+        />
       </div>
 
-      {loading === true && aiResponse === "" ? (
+      {/* {loading === true && aiResponse === "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
       ) : (
         <div style={{ margin: "30px 0" }}>
           <p>{aiResponse}</p>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

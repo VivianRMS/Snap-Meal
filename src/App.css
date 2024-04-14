@@ -86,14 +86,24 @@ h1 {
 .food {
   font-size: 20px;
   line-height: 1.4;
-  background-color: #44403c;
+  /* background-color: #44403c; */
   margin-bottom: 16px;
   padding: 16px 24px;
   letter-spacing: -1px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  /* gap: 24px; */
   border-radius: 16px;
+}
+
+.food-list-header {
+  margin-bottom: 5px;
+  padding-bottom: 0px;
+  justify-content: center;
+}
+
+.food-reg {
+  background-color: #44403c;
 }
 
 @media (max-width: 1200px) {
@@ -106,7 +116,7 @@ h1 {
 
 .tag {
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 18px;
   font-family: "Coiny", sans-serif;
   padding-top: 3px;
   padding-left: 10px;
@@ -183,6 +193,13 @@ ul {
   background-image: none;
 }
 
+.btn-delete {
+  font-size: 12px;
+  padding: 8px 10px 8px;
+  margin-bottom: 3px;
+  background-image: #ef4444;
+}
+
 .vote-buttons {
   margin-left: auto;
   flex-shrink: 0;
@@ -218,14 +235,25 @@ ul {
   background-color: #44403c;
   margin-bottom: 40px;
   padding: 16px 40px;
-  display: flex;
+  /* display: flex; */
   align-items: center;
-  gap: 16px;
+  /* gap: 16px; */
   border-radius: 16px;
   -webkit-border-radius: 16px;
   -moz-border-radius: 16px;
   -ms-border-radius: 16px;
   -o-border-radius: 16px;
+}
+
+.food-form-input {
+  display: flex;
+  gap: 16px;
+}
+
+.food-form-photo{
+  display: flex;
+  gap: 16px;
+  width: 50%;
 }
 
 .food-form input,
@@ -269,4 +297,29 @@ ul {
   .food-form select {
     width: auto;
   }
+}
+
+input[type="file"]{
+  align-content: center;
+}
+
+.food-description{
+  display: flex;
+  gap: 24px
+}
+
+.change-buttons {
+  border: none;
+  background-color: #78716c;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  -ms-border-radius: 100px;
+  -o-border-radius: 100px;
+  color: inherit;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
 }

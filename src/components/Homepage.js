@@ -54,7 +54,7 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [allergies, setAllergies] = useState("");
   const [lovedFood, setLovedFood] = useState("");
-  const [foods, setfoods] = useState([]);
+  const [foods, setfoods] = useState(testfoods);
   const [recipes, setRecipe] = useState(result_schedule);
   const [loading, setLoading] = useState(false);
   const [currentCatgory, setCurrentCategory] = useState("food");
@@ -171,7 +171,6 @@ const Home = () => {
           <Loader />
         ) : currentCatgory === "food" ? (
           <div>
-            <AiwithImage start_id={foods.length} setfoods={setfoods} />
             <button
               className="btn btn-large btn-open"
               onClick={() => setShowAddFood((show) => !show)}
@@ -291,37 +290,40 @@ function NewFoodForm({ foods, setfoods, setShowAddFood }) {
 
   return (
     <form className="food-form" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="What's your food?"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        disabled={isUpLoading}
-      />
-      <input
-        type="number"
-        placeholder="How many do you buy?"
-        value={count}
-        onChange={(e) => setCount(e.target.value)}
-        disabled={isUpLoading}
-      />
-      <input
-        type="date"
-        placeholder="Purchase Date"
-        value={purchaseDate}
-        onChange={(e) => setPurchaseDate(e.target.value)}
-        disabled={isUpLoading}
-      />
-      <input
-        type="date"
-        placeholder="Expiration Date"
-        value={expirationDate}
-        onChange={(e) => setExpirationDate(e.target.value)}
-        disabled={isUpLoading}
-      />
-      <button className="btn btn-large" disabled={isUpLoading}>
-        Post
-      </button>
+      <AiwithImage start_id={foods.length} setfoods={setfoods} />
+      <div className="food-form-input">
+        <input
+          type="text"
+          placeholder="What's your food?"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          disabled={isUpLoading}
+        />
+        <input
+          type="number"
+          placeholder="How many do you buy?"
+          value={count}
+          onChange={(e) => setCount(e.target.value)}
+          disabled={isUpLoading}
+        />
+        <input
+          type="date"
+          placeholder="Purchase Date"
+          value={purchaseDate}
+          onChange={(e) => setPurchaseDate(e.target.value)}
+          disabled={isUpLoading}
+        />
+        <input
+          type="date"
+          placeholder="Expiration Date"
+          value={expirationDate}
+          onChange={(e) => setExpirationDate(e.target.value)}
+          disabled={isUpLoading}
+        />
+        <button className="btn btn-large" disabled={isUpLoading}>
+          Post
+        </button>
+      </div>
     </form>
   );
 }
@@ -334,6 +336,7 @@ function FoodList({ foods, setfoods }) {
   return (
     <section>
       <ul className="food-list">
+        <FoodHeader />
         {foods.map((food) => (
           <Food key={food.id} food={food} setfoods={setfoods} />
         ))}
@@ -342,6 +345,38 @@ function FoodList({ foods, setfoods }) {
     </section>
   );
 }
+
+const FoodHeader = () => {
+  return (
+    <li className="food food-list-header">
+      <p style={{ flex: 3 }}>Name</p>
+      <span
+        className="tag"
+        style={{ flex: 2, display: "flex", justifyContent: "center" }}
+      >
+        Count
+      </span>
+      <span
+        className="tag"
+        style={{ flex: 2, display: "flex", justifyContent: "center" }}
+      >
+        Purchase Date
+      </span>
+      <span
+        className="tag"
+        style={{ flex: 2, display: "flex", justifyContent: "center" }}
+      >
+        Expiration Date
+      </span>
+      <span
+        className="tag"
+        style={{ flex: 1, display: "flex", justifyContent: "center" }}
+      >
+        Remove
+      </span>
+    </li>
+  );
+};
 
 function Food({ food, setfoods }) {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -373,24 +408,51 @@ function Food({ food, setfoods }) {
   }
 
   return (
-    <li className="food">
-      <p>{food.name}</p>
-      <div className="food-description">
-        <span className="tag">{food.count}</span>
-        <span className="tag">{food.purchaseDate}</span>
-        <span className="tag">{food.expirationDate}</span>
-      </div>
-
-      <div className="change-buttons">
-        <button onClick={() => handleChange("add")} disabled={isUpdating}>
-          +
-        </button>
-        <button onClick={() => handleChange("minus")} disabled={isUpdating}>
+    <li className="food food-reg">
+      <p style={{ flex: 3 }}>{food.name.toUpperCase()}</p>
+      <span
+        className="count"
+        style={{ flex: 2, display: "flex", justifyContent: "center" }}
+      >
+        <button
+          className="change-buttons"
+          onClick={() => handleChange("minus")}
+          disabled={isUpdating}
+        >
           -
         </button>
-      </div>
-      <div className="confirm-button">
-        <button onClick={() => handleChange("delete")} disabled={isUpdating}>
+        <span className="tag">{food.count}</span>
+        <button
+          className="change-buttons"
+          onClick={() => handleChange("add")}
+          disabled={isUpdating}
+        >
+          +
+        </button>
+      </span>
+      <span
+        className="tag"
+        style={{ flex: 2, display: "flex", justifyContent: "center" }}
+      >
+        {food.purchaseDate}
+      </span>
+      <span
+        className="tag"
+        style={{ flex: 2, display: "flex", justifyContent: "center" }}
+      >
+        {food.expirationDate}
+      </span>
+
+      <div
+        className="confirm-button"
+        style={{ flex: 1, display: "flex", justifyContent: "center" }}
+      >
+        <button
+          className="btn btn-category btn-delete"
+          style={{ backgroundColor: "#ef4444" }}
+          onClick={() => handleChange("delete")}
+          disabled={isUpdating}
+        >
           Delete
         </button>
       </div>
