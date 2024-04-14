@@ -58,15 +58,22 @@ function Planner({ recipeArrayProp, days, num_recipe }) {
   return (
     <div>
       <div>
-        {recipeArray.map((recipeList, listIndex) => (
-          <DailyRecipe
-            recipeList={recipeList}
-            listIndex={listIndex}
-            handleStarClick={handleStarClick}
-            starredRecipes={starredRecipes}
-            num_recipe={num_recipe}
-          />
-        ))}
+        {recipeArray.length === 0 ? (
+          <p className="message">
+            Share your preferences and generate recipes!🤩
+          </p>
+        ) : (
+          recipeArray.map((recipeList, listIndex) => (
+            <DailyRecipe
+              key={listIndex} // Make sure to provide a unique key for each child in a list
+              recipeList={recipeList}
+              listIndex={listIndex}
+              handleStarClick={handleStarClick}
+              starredRecipes={starredRecipes}
+              num_recipe={num_recipe}
+            />
+          ))
+        )}
       </div>
       {tooltipVisible && (
         <div

@@ -15,7 +15,7 @@ const result_schedule = [];
 
 const CATEGORIES = [
   { name: "food", color: "#3b82f6" },
-  { name: "receipe", color: "#db2777" },
+  { name: "recipe", color: "#db2777" },
 ];
 
 const Home = () => {
@@ -376,7 +376,7 @@ function NewFoodForm({ foods, setfoods, setShowAddFood }) {
 
 function FoodList({ foods, setfoods }) {
   if (foods.length === 0) {
-    return <p className="message">No foods Now. Upload a photo to add!</p>;
+    return <p className="message">No foods Now. Add new foods!🤩</p>;
   }
 
   return (
