@@ -47,3 +47,5 @@ Continuous Innovation and Improvement: At Snap❤Meal, we're committed to delive
 Expansion of Recipe Variety and Customization Options: We're dedicated to enriching our recipe database with an even wider array of culinary delights. From international cuisines to serving sizes, we aim to cater to every palate and preference.
 
 Community Engagement and Collaboration: We're committed to fostering a vibrant community of home cooks on Snap❤Meal, with collaborative recipe sharing, cooking challenges, and interactive forums. We plan to implement a user database. This will enable us to store user preferences, past activities, and other essential information securely.
+
+[Demo]([URL](https://www.youtube.com/watch?v=2w96Dpqqt2M))
