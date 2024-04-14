@@ -139,7 +139,7 @@ function OneReceipe({
       </div>
 
       <p>
-        <strong>💡Description:</strong>
+        <strong>💡 Description:</strong>
       </p>
       <p style={{ marginBottom: "5px", marginLeft: "26px" }}>
         {recipe.recipeDescription.replace(/\n/g, " ")}
