@@ -48,4 +48,4 @@ Expansion of Recipe Variety and Customization Options: We're dedicated to enrich
 
 Community Engagement and Collaboration: We're committed to fostering a vibrant community of home cooks on Snap❤Meal, with collaborative recipe sharing, cooking challenges, and interactive forums. We plan to implement a user database. This will enable us to store user preferences, past activities, and other essential information securely.
 
-[Demo]([URL](https://www.youtube.com/watch?v=2w96Dpqqt2M))
+[Demo](https://www.youtube.com/watch?v=2w96Dpqqt2M)
