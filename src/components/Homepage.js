@@ -275,11 +275,15 @@ const Home = () => {
                 </div>
               ) : null}
             </div>
-            <Planner
-              recipeArrayProp={recipes}
-              days={selectedDay}
-              num_recipe={recipeCount}
-            />
+            {loading ? (
+              <Loader />
+            ) : (
+              <Planner
+                recipeArrayProp={recipes}
+                days={selectedDay}
+                num_recipe={recipeCount}
+              />
+            )}
           </div>
         )}
       </main>
