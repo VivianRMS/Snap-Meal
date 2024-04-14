@@ -121,22 +121,39 @@ function OneReceipe({
 }) {
   return (
     <div key={index}>
-      <h3>{recipe.recipeName}</h3>
-      <button onClick={() => handleStarClick(listIndex, index)}>
-        {starredRecipes.has(listIndex * num_recipe + index) ? "★" : "☆"}
-      </button>
+      <div className="recipe-header">
+        <button
+          className="star-button"
+          onClick={() => handleStarClick(listIndex, index)}
+        >
+          {starredRecipes.has(listIndex * num_recipe + index) ? "★" : "☆"}
+        </button>
+        <h3>{recipe.recipeName}</h3>
+      </div>
 
       <p>
-        <strong>Description:</strong>{" "}
+        <strong>💡Description:</strong>
+      </p>
+      <p style={{ marginBottom: "5px", marginLeft: "26px" }}>
         {recipe.recipeDescription.replace(/\n/g, " ")}
       </p>
       <p>
-        <strong>Ingredients:</strong>
+        <strong>🧑‍🍳 Ingredients:</strong>
       </p>
-      <ul>
+      <ul style={{ marginLeft: "30px" }}>
         {recipe.ingredients.map((ingredient, idx) => (
-          <li key={idx}>
-            {ingredient.food} - {ingredient.amount}
+          <li
+            key={idx}
+            style={{
+              display: "flex",
+              justifyContent: "space-between", // This will put the items on opposite ends.
+              alignItems: "center",
+              width: "25%", // Set the width to 100% to use the full width of the container.
+            }}
+          >
+            <p>{ingredient.food}</p>
+
+            <p>✕ {ingredient.amount}</p>
           </li>
         ))}
       </ul>

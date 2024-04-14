@@ -432,3 +432,26 @@ input[type="file"]{
   background-color: #8f8989; /* Change color as needed */
   margin: 0px 0; /* Adjust margin as needed */
 }
+
+.recipe-header{
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+  margin-top: 15px;
+}
+
+.star-button {
+  background: none;
+  border: none;
+  color: yellow;
+  font-size: 24px; /* Make the star bigger */
+  cursor: pointer;
+  padding-bottom: 0px;
+}
+
+/* To remove default button styles on focus */
+.star-button:focus {
+  outline: none;
+}
