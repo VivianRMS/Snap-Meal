@@ -50,6 +50,8 @@ const testfoods = [
 ];
 
 const Home = () => {
+  const [selectedDay, setSelectedDay] = useState(1); // Default value for selected day
+  const [recipeCount, setRecipeCount] = useState(1); // Default value for recipe count
   const [search, setSearch] = useState("");
   const [allergies, setAllergies] = useState("");
   const [foods, setfoods] = useState([]);
@@ -78,7 +80,9 @@ const Home = () => {
     setLoading(true);
     try {
       // Format the expiration dates as strings for the prompt
-      const prompt = `Generate a evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${foods
+      const date = "2024.4.14"
+      const prompt = `today is ${date}.Generate a evenly distributed  ${selectedDay } days schedule of recipes for each of the given foods based, ${recipeCount} recipes a day,
+       and use only given food, stop generate if there is not enough food left, do not use expired food and try to use food that will expire earlier first: ${foods
         .map((food) => `${food.name} (expires on ${food.expirationDate})`)
         .join(", ")}, and restricted to the diet type${
         selectedDiets.length > 1 ? "s" : ""
@@ -87,8 +91,8 @@ const Home = () => {
         .replace(
           /, ([^,]*)$/,
           " and $1"
-        )}. Also strictly avoid foods in ${allergies}. Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe), 'day'(day of each recipe range from 1 to 14). Make Sure the JSON is valid,but do not write '''json before json array`;
-
+        )}. Also strictly avoid foods in ${allergies}.Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe), 'day'(day of each recipe range from 1 to 14),'ingredients'(food used in this recipe and number used and the expire day). Make Sure the JSON is valid and the array syntax valid, but do not write '''json before json array`;
+        console.log(prompt)
       const result = await model_text.generateContent([prompt]);
       const response = await result.response.candidates[0].content.parts[0]
         .text;
@@ -178,6 +182,21 @@ const Home = () => {
           <button style={{ marginLeft: "20px" }} onClick={() => handleClick()}>
             Confirm
           </button>
+           {/* Input fields for selecting day and recipe count */}
+        <label htmlFor="day">Select Day:</label>
+        <input
+          type="number"
+          id="day"
+          value={selectedDay}
+          onChange={(e) => setSelectedDay(parseInt(e.target.value))}
+        />
+        <label htmlFor="recipeCount">Recipe Count per Day:</label>
+        <input
+          type="number"
+          id="recipeCount"
+          value={recipeCount}
+          onChange={(e) => setRecipeCount(parseInt(e.target.value))}
+        />
           <button style={{ marginLeft: "20px" }} onClick={() => handleClick2()}>
             Regenerate
           </button>
