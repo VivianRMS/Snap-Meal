@@ -409,7 +409,7 @@ function FoodList({ foods, setfoods }) {
 const FoodHeader = () => {
   return (
     <li className="food food-list-header">
-      <p style={{ flex: 3 }}>Name</p>
+      <p style={{ flex: 3, fontFamily: "Coiny" }}>Name</p>
       <span
         className="tag"
         style={{ flex: 2, display: "flex", justifyContent: "center" }}
@@ -469,7 +469,7 @@ function Food({ food, setfoods }) {
 
   return (
     <li className="food food-reg">
-      <p style={{ flex: 3 }}>{food.name.toUpperCase()}</p>
+      <p style={{ flex: 3, fontFamily: "Coiny" }}>{food.name.toUpperCase()}</p>
       <span
         className="count"
         style={{ flex: 2, display: "flex", justifyContent: "center" }}

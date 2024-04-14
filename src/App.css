@@ -332,8 +332,8 @@ input[type="file"]{
 .change-buttons {
   border: none;
   background-color: #78716c;
-  font-size: 12px;
-  padding: 4px 10px;
+  font-size: 20px;
+  padding: 4px 6px;
   border-radius: 100px;
   -webkit-border-radius: 100px;
   -moz-border-radius: 100px;
