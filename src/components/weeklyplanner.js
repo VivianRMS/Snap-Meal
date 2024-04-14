@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-function Planner(recipeArrayProp) {
+function Planner({ recipeArrayProp, days, num_recipe }) {
   const [recipeArray, setRecipeArray] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [tooltipContent, setTooltipContent] = useState(""); // State to manage tooltip content
@@ -36,72 +36,91 @@ function Planner(recipeArrayProp) {
 
   useEffect(() => {
     // Define a function to create the biweekly planner
-    function createBiweeklyPlanner(dataArray) {
-
-      const weeks = [];
-      try{
-        for (let week = 0; week < 2; week++) {
-          const days = [];
-          const daynums = [];
-          for (let day = 1; day <= 7; day++) {
-            const index = day + week * 7 - 1;
-            const recipe = dataArray.recipeArrayProp[index];
-            console.log(recipe)
-            const isStarred = starredRecipes.has(index);
-            daynums.push(
-              <td key={`daynum-${index}`}>
-                {day}
-              </td>
-            );
-            days.push(
-              <td key={`recipe-${index}`} onMouseEnter={(e) => handleRecipeHover(recipe.recipeDescription, e)} onMouseLeave={handleRecipeHoverLeave}>
-              <div>
-                <span>{recipe.recipeName}</span>
-                <button onClick={() => handleStarClick(index)}>{isStarred ? '★' : '☆'}</button>
-              </div>
-            </td>
-            );
-          }
-          weeks.push(
-            <React.Fragment key={`week-${week}`}>
-              <thead>
-                <tr>
-                  <th colSpan="7">Week {week + 1}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>{daynums}</tr>
-                <tr>{days}</tr>
-              </tbody>
-            </React.Fragment>
-          );
+    function createPlanner(dataArray, days, num_recipe) {
+      if (dataArray.length === 0) return [];
+      console.log(dataArray);
+      let recipe_sum = [];
+      try {
+        for (let index = 0; index < dataArray.length; index += num_recipe) {
+          let chunk = dataArray.slice(index, index + num_recipe);
+          recipe_sum.push(chunk);
         }
-    } catch (error){
-      console.error("wrong with return receipe, please try generate again")
-      weeks.push("generate failed, please generage again")
-    }
-      return weeks;
+        // for (let i = 0; i < days; i++) {
+        //   const day_recipe = [];
+        //   for (let j = 0; j < num_recipe; j++) {
+        //     const index = i + j;
+        //     day_recipe.push(dataArray[index]);
+        //     console.log(day_recipe);
+        //     const isStarred = starredRecipes.has(index);
+        //   days.push(
+        //     <td
+        //       key={`recipe-${index}`}
+        //       onMouseEnter={(e) =>
+        //         handleRecipeHover(recipe.recipeDescription, e)
+        //       }
+        //       onMouseLeave={handleRecipeHoverLeave}
+        //     >
+        //       <div>
+        //         <span>{recipe.recipeName}</span>
+        //         <button onClick={() => handleStarClick(index)}>
+        //           {isStarred ? "★" : "☆"}
+        //         </button>
+        //       </div>
+        //     </td>
+        //   );
+        //   }
+        //   recipe_sum.push(day_recipe);
+        //   console.log(recipe_sum);
+        // }
+        console.log(recipe_sum);
+      } catch (error) {
+        console.error("wrong with return receipe, please try generate again");
+        recipe_sum.push("generate failed, please generage again");
+      }
+      return recipe_sum;
     }
 
     // Create the biweekly planner table
-    setRecipeArray(createBiweeklyPlanner(recipeArrayProp));
-  }, [starredRecipes,recipeArrayProp]); // Include starredRecipes in the dependency array
-
+    setRecipeArray(createPlanner(recipeArrayProp, days, num_recipe));
+  }, [starredRecipes, recipeArrayProp]); // Include starredRecipes in the dependency array
 
   return (
     <div>
-      <table>
-        {recipeArray}
-      </table>
+      <div>
+        {recipeArray.map((recipeList, listIndex) => (
+          <div key={listIndex}>
+            <h2>Day {listIndex + 1}</h2>
+            {recipeList.map((recipe, index) => (
+              <div key={index}>
+                <h3>{recipe.recipeName}</h3>
+                <p>
+                  <strong>Description:</strong>{" "}
+                  {recipe.recipeDescription.replace(/\n/g, " ")}
+                </p>
+                <p>
+                  <strong>Ingredients:</strong>
+                </p>
+                <ul>
+                  {recipe.ingredients.map((ingredient, idx) => (
+                    <li key={idx}>
+                      {ingredient.food} - {ingredient.amount}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
       {tooltipVisible && (
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: tooltipPosition.x,
             top: tooltipPosition.y,
-            border: '1px solid black',
-            backgroundColor: 'white',
-            padding: '5px',
+            border: "1px solid black",
+            backgroundColor: "white",
+            padding: "5px",
           }}
         >
           {tooltipContent}
