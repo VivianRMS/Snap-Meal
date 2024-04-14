@@ -96,7 +96,7 @@ const Home = () => {
     }
   }
 
-  const appTitle = "Food Planner";
+  const appTitle = "Snap ❤ Meal";
 
   const [diets, setDiets] = useState([
     { type: "Vegan Diet", isSelected: false },

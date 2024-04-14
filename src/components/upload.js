@@ -23,7 +23,7 @@ const AiwithImage = ({ start_id, setfoods }) => {
     setResponse("");
     const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
     const result = await model.generateContent([
-      `What food are in the picture? Only return a JSON array with 'id' incrementing from ${start_id} (for example, if start_id is 3, then the first id will be 4), 'name' (name of each food), 'count' (count of each food), 'purchaseDate' and 'expirationDate' as values. The purchaseDate will be the current date of the picture being uploaded in the formate of year-month-day, for exmaple today is 2024-04-13, and the expiration date will be the general expiration date of the food. For example, red peppers are in the graph, the purchase date will be April 13, 2024 and the general expiration date of red peppers is about 7 days, so the expiration date of it will be April 20,2024. Make Sure the JSON is valid.`,
+      `What food are in the picture? Only return a JSON array with 'id' incrementing from ${start_id} (for example, if start_id is 3, then the first id will be 4), 'name' (name of each food), 'count' (count of each food), 'purchaseDate' and 'expirationDate' as values. The purchaseDate will be the current date of the picture being uploaded in the formate of year-month-day, for exmaple today is 2024-04-13, and the expiration date will be the general expiration date of the food. For example, red peppers are in the graph, the purchase date will be April 13, 2024 and the general expiration date of red peppers is about 7 days, so the expiration date of it will be April 20,2024. Make Sure the JSON is valid and the array syntax valid, but do not write '''json before json array`,
       imageInineData,
     ]);
     const response = await result.response;
@@ -91,13 +91,9 @@ const AiwithImage = ({ start_id, setfoods }) => {
         />
       </div>
 
-      {/* {loading === true && aiResponse === "" ? (
+      {loading === true && aiResponse === "" ? (
         <p style={{ margin: "30px 0" }}>Loading ...</p>
-      ) : (
-        <div style={{ margin: "30px 0" }}>
-          <p>{aiResponse}</p>
-        </div>
-      )} */}
+      ) : null}
     </div>
   );
 };
