@@ -99,17 +99,16 @@ const Home = () => {
     try {
       // Format the expiration dates as strings for the prompt
       const date = "2024.4.14"
-      const prompt = `today is ${date}.Generate a evenly distributed  ${selectedDay } days schedule of recipes for each of the given foods based, ${recipeCount} recipes a day,
+      const prompt = `today is ${date}.Generate a evenly distributed  ${selectedDay} days schedule of recipes for each of the given foods based, ${recipeCount} recipes a day,
        and use only given food, stop generate if there is not enough food left, do not use expired food and try to use food that will expire earlier first: ${foods
-        .map((food) => `${food.name} (expires on ${food.expirationDate})`)
-        .join(", ")}, and restricted to the diet type${
+         .map((food) => `${food.name} (expires on ${food.expirationDate})`)
+         .join(", ")}, and restricted to the diet type${
         selectedDiets.length > 1 ? "s" : ""
       } ${selectedDiets
         .join(", ")
-        .replace(
-          /, ([^,]*)$/,
-          " and $1"
-        )}. Also strictly avoid foods in ${allergies}.Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe), 'day'(day of each recipe range from 1 to 14),'ingredients'(food used in this recipe and number used and the expire day). Make Sure the JSON is valid and the array syntax valid, but do not write '''json before json array`;
+        .replace(/, ([^,]*)$/, " and $1")}. Make sure to include the recipes: ${
+        Planner.starredRecipes
+      }, ${lovedFood}. Also strictly avoid foods in ${allergies}. Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe), 'day'(day of each recipe range from 1 to 14),'ingredients'(food used in this recipe and number used and the expire day). Make Sure the JSON is valid and the array syntax valid, but do not write '''json before json array`;
         console.log(prompt)
       const result = await model_text.generateContent([prompt]);
       const response = await result.response.candidates[0].content.parts[0]
@@ -245,7 +244,7 @@ const Home = () => {
                 >
                   Confirm
                 </button>
-                <p>Favorite foods: {lovedFood}</p>
+                    <p>Favorite foods: {lovedFood}</p>
               </div>
             </div>
             <Planner recipeArrayProp={recipes} />
