@@ -77,7 +77,7 @@ const AiwithImage = ({ start_id, setfoods }) => {
             onClick={() => handleClick()}
           >
             {" "}
-            Search
+            Generate Foods
           </button>
         </div>
         <img

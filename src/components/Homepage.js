@@ -131,7 +131,12 @@ const Home = () => {
     <div>
       <header className="header">
         <div className="logo">
-          {/* <img src="logo.png" height="68" width="68" alt="Today I Learned Logo" /> */}
+          <img
+            src="logo.png"
+            height="68"
+            width="68"
+            alt="Today I Learned Logo"
+          />
           <h1>{appTitle}</h1>
         </div>
       </header>
@@ -336,7 +341,12 @@ function NewFoodForm({ foods, setfoods, setShowAddFood }) {
 
   return (
     <form className="food-form" onSubmit={handleSubmit}>
+      <p className="food-instruction">
+        Automatically get foods details by uplaoding a photo of clearly
+        positioned foods.
+      </p>
       <AiwithImage start_id={foods.length} setfoods={setfoods} />
+      <p className="food-instruction">Specify new food by yourself.</p>
       <div className="food-form-input">
         <input
           type="text"
@@ -366,8 +376,12 @@ function NewFoodForm({ foods, setfoods, setShowAddFood }) {
           onChange={(e) => setExpirationDate(e.target.value)}
           disabled={isUpLoading}
         />
-        <button className="btn btn-large" disabled={isUpLoading}>
-          Post
+        <button
+          className="btn btn-large"
+          style={{ backgroundColor: "#8b5cf6", backgroundImage: "none" }}
+          disabled={isUpLoading}
+        >
+          Add
         </button>
       </div>
     </form>

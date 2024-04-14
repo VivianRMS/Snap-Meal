@@ -63,12 +63,14 @@ section {
 
 /* ELEMENTS */
 .logo {
+  display: flex;
   align-items: center;
+  gap: 24px;
 }
 
 .logo img {
-  width: 68px;
-  height: 68px;
+  width: 128px;
+  height: 128px;
 }
 
 h1 {
