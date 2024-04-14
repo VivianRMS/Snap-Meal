@@ -80,7 +80,7 @@ const Home = () => {
         .replace(
           /, ([^,]*)$/,
           " and $1"
-        )}. Also strictly avoid foods in ${allergies}. Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe, what's the step to make the food),'ingredients'(only mention the food given and used in this recipe and number used, do not include food that is not provided to you!). Make Sure the JSON is valid and the array syntax valid, but do not write '''json before json array`;
+        )}. Also strictly avoid foods in ${allergies}. Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe, what's the step to make the food),'ingredients'(only mention the food given and used in this recipe and number used, do not include food that is not provided to you! it will be in the form of a list of dictionaries in the format of [{"food": "red peppers", "amount": 1}, {food:"onions", amount:2}]). Make Sure the JSON is valid and the array syntax valid, but do not write '''json before json array`;
       console.log(prompt);
       const result = await model_text.generateContent([prompt]);
       const response = await result.response.candidates[0].content.parts[0]
@@ -215,7 +215,7 @@ const Home = () => {
                 >
                   Confirm
                 </button>
-                    <p>Favorite foods: {lovedFood}</p>
+                <p>Favorite foods: {lovedFood}</p>
               </div>
             </div>
             <Planner

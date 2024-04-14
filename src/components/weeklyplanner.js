@@ -93,6 +93,10 @@ function Planner({ recipeArrayProp, days, num_recipe }) {
             {recipeList.map((recipe, index) => (
               <div key={index}>
                 <h3>{recipe.recipeName}</h3>
+                {/* <button onClick={() => handleStarClick(index)}>
+                  {isStarred ? "★" : "☆"}
+                </button> */}
+
                 <p>
                   <strong>Description:</strong>{" "}
                   {recipe.recipeDescription.replace(/\n/g, " ")}
