@@ -11,46 +11,16 @@ const now_date = new Date();
 const exp_date = new Date(now_date);
 exp_date.setDate(exp_date.getDate() + 3);
 
-const recipeTemplate = {
-  recipeName: "",
-  recipeDescription: "",
-  numberIn14Days: 0,
-};
-
-const result_schedule = Array.from({ length: 14 }, () => ({
-  ...recipeTemplate,
-}));
+const result_schedule = [];
 
 const CATEGORIES = [
   { name: "food", color: "#3b82f6" },
   { name: "receipe", color: "#16a34a" },
 ];
 
-const testfoods = [
-  {
-    id: 1,
-    name: "apple",
-    count: 3,
-    purchaseDate: "2023",
-    expirationDate: "2023",
-  },
-  {
-    id: 2,
-    name: "pork belly",
-    count: 2,
-    purchaseDate: "2023",
-    expirationDate: "2023",
-  },
-  {
-    id: 3,
-    name: "spinach",
-    count: 1,
-    purchaseDate: "2023",
-    expirationDate: "2023",
-  },
-];
-
 const Home = () => {
+  const [selectedDay, setSelectedDay] = useState(7); // Default value for selected day
+  const [recipeCount, setRecipeCount] = useState(1); // Default value for recipe count
   const [search, setSearch] = useState("");
   const [allergies, setAllergies] = useState("");
   const [lovedFood, setLovedFood] = useState("");
@@ -96,8 +66,13 @@ const Home = () => {
     setLoading(true);
     try {
       // Format the expiration dates as strings for the prompt
-      const prompt = `Generate a evenly distributed 14-day schedule of recipes for each of the following foods based on their expiration dates: ${foods
-        .map((food) => `${food.name} (expires on ${food.expirationDate})`)
+      const date = "2024.4.14";
+      const count = selectedDay * recipeCount;
+      const prompt = `Today is ${date}. Generate only and exactly ${count} recipes. You can only use the given food as ingredients, do not use expired food and try to use food that will expire earlier first: ${foods
+        .map(
+          (food) =>
+            `${food.name} (has amount of ${food.count} and expires on ${food.expirationDate})`
+        )
         .join(", ")}, and restricted to the diet type${
         selectedDiets.length > 1 ? "s" : ""
       } ${selectedDiets
@@ -105,8 +80,8 @@ const Home = () => {
         .replace(
           /, ([^,]*)$/,
           " and $1"
-        )}. Also strictly avoid foods in ${allergies}. Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe), 'day'(day of each recipe range from 1 to 14). Make Sure the JSON is valid,but do not write '''json before json array`;
-
+        )}. Also strictly avoid foods in ${allergies}. Only return a JSON array with 'id' incrementing from 1 by 1 each time, 'recipeName' (name of each recipe), 'recipeDescription' (description of each recipe, what's the step to make the food),'ingredients'(only mention the food given and used in this recipe and number used, do not include food that is not provided to you!). Make Sure the JSON is valid and the array syntax valid, but do not write '''json before json array`;
+      console.log(prompt);
       const result = await model_text.generateContent([prompt]);
       const response = await result.response.candidates[0].content.parts[0]
         .text;
@@ -192,8 +167,8 @@ const Home = () => {
               <DietFilters diets={diets} onDietChange={handleDietChange} />
               <div>
                 <p>
-                  Have other allergies? No worries! Tell us you want to avoid
-                  these food:
+                  Have other allergies? No worries!
+                  <p>Tell us you want to avoid these food(ONLY food names):</p>
                 </p>
                 <input
                   placeholder="Last time record"
@@ -205,6 +180,20 @@ const Home = () => {
                 >
                   Confirm
                 </button>
+                <label htmlFor="day">Select Day:</label>
+                <input
+                  type="number"
+                  id="day"
+                  value={selectedDay}
+                  onChange={(e) => setSelectedDay(parseInt(e.target.value, 10))}
+                />
+                <label htmlFor="recipeCount">Recipe Count per Day:</label>
+                <input
+                  type="number"
+                  id="recipeCount"
+                  value={recipeCount}
+                  onChange={(e) => setRecipeCount(parseInt(e.target.value, 10))}
+                />
                 <button
                   style={{ marginLeft: "20px" }}
                   onClick={() => handleClick2()}
@@ -214,9 +203,9 @@ const Home = () => {
                 <p>Last Saved: {allergies}</p>
               </div>
               <div>
-                <p>Have something really need to eat?</p>
+                <p>Have something really want to eat?</p>
                 <input
-                  placeholder="what do you want to eat?"
+                  placeholder="what do you want?"
                   onChange={(e) => handleChangeSearch(e)}
                 />
                 <button
@@ -225,10 +214,14 @@ const Home = () => {
                 >
                   Confirm
                 </button>
-                <p>Favorite foods: {lovedFood}</p>
+                    <p>Favorite foods: {lovedFood}</p>
               </div>
             </div>
-            <Planner recipeArrayProp={recipes} />
+            <Planner
+              recipeArrayProp={recipes}
+              days={selectedDay}
+              num_recipe={recipeCount}
+            />
           </div>
         )}
       </main>
