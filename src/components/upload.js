@@ -4,7 +4,7 @@ import { getBase64 } from "../helpers/imageHelper";
 
 const AiwithImage = ({ start_id, setfoods }) => {
   const genAI = new GoogleGenerativeAI(
-    "AIzaSyAJcTSS_Ru7jk7dl03P-4e3ZVaG28bnNms"
+    "place_your_own"
   );
 
   const [image, setImage] = useState("");
