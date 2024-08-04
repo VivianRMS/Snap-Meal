@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import AiwithImage from "./upload";
 import Planner from "./weeklyplanner";
 
-const genAI = new GoogleGenerativeAI("AIzaSyAqmfslqSGlrqWbSllhR5ce0NPD2hxMuGs");
+const genAI = new GoogleGenerativeAI("place_your_own");
 const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
 const model_text = genAI.getGenerativeModel({ model: "gemini-pro" });
 
